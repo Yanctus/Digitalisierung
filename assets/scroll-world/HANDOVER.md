@@ -52,8 +52,8 @@ Das bestehende React/TS/Vite-Repo bleibt; nur die Bildquelle wechselt.
 |---|---|---|
 | 1 | Der Ast — Landung in der Kuhle, Netz aktiviert | 5 s ✅ **auf 5 s gekürzt** |
 | 1.5 | Abflug vom Ast, Abstieg am Stamm mit fortlaufender Digitalisierung, Rasen, Enthüllung des Bürogebäudes | 10 s ✅ gerendert |
-| 2 | Strukturen — Fassaden-Scan, Etagen erwachen von innen, Kippfenster | 8 s ✅ gerendert |
-| 2.5 | Durchflug durchs **Kippfenster**, kurze Dunkelheit | 5 s ⬅ **als Nächstes** |
+| 2 | Scan aus der Distanz, Wiese vernetzen, Fassadennetz — Gebäude bleibt **dunkel** — Glas wird zu Licht und öffnet ein Tor | 10 s ✅ gerendert |
+| 2.5 | Durch das Lichttor, kurz dunkel, dann **erwacht das Haus** (Lichtwelle), Menschen in Bewegung, Netz beginnt | 8 s ✅ gerendert |
 | 3 | Menschen — Flug durchs Großraumbüro, Verbindungen zwischen Personen | 10 s |
 | 4 | Prozesse — Landung auf Dokument, Prozessnetz über dem Tisch, kein Pull-back | 10 s |
 | 4.5 | Ausflug durchs Lüftungsgitter, Dunkelheit, Durchbruch über die Stadt | 5 s |
@@ -74,16 +74,53 @@ surfaces" wirkte sofort. Dasselbe beim Flügelschlag — „never static" bracht
 „beating in fast soft-blurred strokes" brachte den Schlag. Wenn ein Merkmal nicht
 kommt: beschreiben, wie es aussehen *soll*, statt zu verbieten, was nicht sein darf.
 
-**INNENRÄUME GEDÄMPFT** (ab Akt 2.5, ergänzend zum STIL-Block)
-> Interiors stay dim and moody: large parts of the frame remain in deep violet
-> shadow, artificial light reads as small warm pools and glowing edges rather than
-> broad even illumination, and the image never becomes a brightly lit realistic
-> architectural render.
+**~~INNENRÄUME GEDÄMPFT~~ — VERWORFEN, war falsch**
 
-Grund: Die mittlere Helligkeit stieg von Akt 1.5 (41) über Akt 2 v1 (65) auf Akt 2 v2
-(88), weil beleuchtete Büroetagen ins Bild kamen. Flächige Helligkeit tötet den
-Schatten-Licht-Kontrast, der den Stil trägt — das Bild rutscht dann zurück ins
-Fotorealistische. Akt 3 spielt komplett im Büro und ist hier besonders gefährdet.
+Diese Regel stand kurzzeitig hier und hat vier Fehlversuche gekostet. Sie verlangte
+dunkle Innenräume, um den Stil zu retten — aber Akt 2 zeigte von außen erleuchtete
+Etagen, und ein dunkler Innenraum widerspricht dem sichtbar. **Kontinuität schlägt
+Stilregel.**
+
+Der eigentliche Denkfehler: Helligkeit und Stil wurden gleichgesetzt. Nicht die
+Helligkeit zerstört den gemalten Look, sondern die **Flachheit**. Ein hell
+beleuchteter Raum kann sehr wohl gemalt aussehen. Der Stilschutz gehört deshalb an
+die **Form**, nicht an die Dunkelheit — im STIL-Block steht dafür jetzt
+„light modelled in clear shapes rather than flat even illumination".
+
+**HELLIGKEIT IMMER AUS DEM STARTFRAME ABLEITEN**
+> Wie hell eine Szene sein muss, ergibt sich aus dem vorigen Leg, nicht aus dem
+> Stilempfinden. Im Prompt ausdrücklich verankern, z. B. „exactly as bright as it
+> looked through the glass from outside; the brightness never drops".
+
+**STIL AM MOTIV VERANKERN, NICHT NUR OBEN IM BLOCK**
+> Je stärker ein Motiv fotorealistische Vorbilder hat, desto näher muss der
+> Stilsatz daran stehen. Ein Ast im Abendlicht ist formbar; ein Großraumbüro und
+> erst recht **Menschen** haben überwältigend viele Stock-Vorbilder — dagegen
+> kommt ein Stilsatz 1000 Zeichen weiter oben nicht an.
+> Bei Menschen wirkte: „simplified graphic figures, sculpted in broad flat shapes
+> and rim light, with no fine clothing detail, no hair detail and no facial
+> features at all". Dazu hilft, den Raum **klein** zu halten — ein weiter Bürosaal
+> ist von sich aus generisch.
+
+**BEWEGUNG ALS HANDLUNG BENENNEN**
+> „sitting at their desks", „standing in conversation" sind Zustände — die Figuren
+> stehen dann wie ein Standbild. Es braucht konkrete Verben: „hands typing and
+> sliding across keyboards, a head turning to look up, someone gesturing with both
+> hands while speaking, one person walking slowly between the desks, a chair
+> turning."
+
+**GRÖSSEN AN DER LIBELLE MESSEN**
+> „large", „wide enough", „with room to spare" ergaben dreimal eine Öffnung, die
+> schmaler war als ihre Spannweite. Erst der Vergleich mit einem sichtbaren Objekt
+> wirkte: „far wider and taller than her wingspan, several times as wide as the
+> dragonfly, with a generous margin on both sides of her wings."
+
+**RICHTUNGEN ALS BILD BESCHREIBEN, NICHT ALS RICHTUNG**
+> „the window swings open inwards" ergab zweimal ein nach außen aufschlagendes
+> Fenster. Erst die Bildbeschreibung wirkte: „its pane rotates backwards away from
+> the camera and disappears into the blackness of the room behind, so that from
+> outside only a clean dark rectangular hole is left; the outer surface stays
+> completely flat and unbroken."
 
 **SONNENSTAND**
 > Nie absolut festlegen, sondern **aus dem tatsächlichen Startframe ableiten** und
@@ -158,7 +195,11 @@ Ablauf pro Leg:
 ## Kosten
 
 - 480p ≈ $0,067/s · 720p ≈ $0,151/s · 1080p ≈ $0,374/s
-- Ausgegeben bisher: **~$6,86** · Guthaben: **$19,85** (Stand 04.08.2026, nach Akt 1.5)
+- Ausgegeben bisher: **~$13,00** · Guthaben: **$13,42** (Stand 04.08.2026, nach Akt 2.5)
+- Akt 2 brauchte 5 Anläufe, Akt 2.5 sechs. Die Ursachen stehen alle oben als Regeln.
+  Ein bekannter Fallstrick: Die CLI kann beim Empfangen abstürzen („Unexpected token
+  '<'"), obwohl der Lauf serverseitig fertig und **bezahlt** ist. Dann nicht neu
+  rendern, sondern `monid runs list` und `monid runs get -r <id>` — das Video ist da.
 - Ein 10-s-Leg in 480p kostet konstant **$0,706** — Abrechnung über Tokens
   ($7/1 Mio, ~100.858 Token), nicht über Sekunden. Die $/s oben sind Faustwerte.
 - **Akt 1.5 brauchte 6 Anläufe** ($4,24). Die verworfenen Fassungen scheiterten an:
@@ -171,12 +212,17 @@ Ablauf pro Leg:
 ## Offen
 
 - [x] Akt 1.5 rendern (Baumabstieg) — `previz/akt15-480p.mp4`, Seed 12531
-- [x] Akt 2 rendern (Fassaden-Scan) — `previz/akt2-480p.mp4`, Seed 13033
-- [ ] Akt 2.5 rendern (Durchflug durchs Kippfenster, 5 s)
-      Startframe liegt bereit: `frames/akt2_last.jpg` — Libelle vor dem gekippten
-      Fenster, Fassade vernetzt, Etagen erwacht, eine Person drinnen erkennbar.
-      **Achtung:** Innenraum-Regel anwenden, sonst wird es zu hell.
-- [ ] Akt 3 (Großraumbüro) — hier ist die Aufhellungsgefahr am größten
+- [x] Akt 2 rendern (Scan, Lichttor) — `previz/akt2-480p.mp4`, Seed 86882
+- [x] Akt 2.5 rendern (Durchflug, Haus erwacht) — `previz/akt25-480p.mp4`, Seed 64085
+- [ ] **Akt 3 (10 s) — Menschen vernetzen.** Startframe: `frames/akt25_last.jpg`,
+      warm erleuchteter Raum, Menschen in Bewegung, Netz auf Tischen und Boden
+      begonnen, Menschen untereinander noch **unverbunden**.
+      Offen und mit Norman zu klären: sollen **Personen-Symbole über den Köpfen**
+      erscheinen (aus seinem Referenzbild vom 03.08.)? Wäre ein neues grafisches
+      Element, das der Film bisher nicht hat.
+      Beachten: Orange dominiert am Ende von 2.5 (Sättigung 32) — mit dem violetten
+      Netz über den Menschen sollte sich das von selbst ausgleichen.
+- [ ] Akt 4, 4.5, 5, 6 (33 s)
 - [ ] Texte pro Akt neu schreiben — seit „branchenneutral" und der Änderung von Akt 3 passt die alte Copy nicht mehr. Blockiert nichts, weil HTML.
 - [ ] Engine einbauen: `references/scrub-engine.js` aus dem scroll-world-Plugin, Anbindung in `JourneyCanvas.tsx`
 - [ ] Impressum + Datenschutzerklärung (siehe README)
