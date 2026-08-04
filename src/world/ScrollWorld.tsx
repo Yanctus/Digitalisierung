@@ -85,12 +85,27 @@ export default function ScrollWorld() {
   // gleich verwendet — Bühne, Himmel, Copy und Schiene hängen daran.
   const filmOut = 1 - st.landed
 
+  /**
+   * Die Copy geht deutlich früher als das Bild.
+   *
+   * Beides gleich schnell auszublenden war der Fehler: Die Oberkante der
+   * Landeseite ist durchsichtig (dort trägt noch der letzte Frame), und
+   * halbdurchsichtige Schrift stand dann mitten in der anfahrenden Seite.
+   * Die Schrift muss weg sein, bevor die Seite über sie hinwegzieht — das
+   * Bild darf sich Zeit lassen.
+   */
+  const copyOut = Math.max(0, 1 - st.landed * 3.2)
+
+  /** Der Lichtgrat an der Naht: 0 am Rand, am hellsten auf halbem Weg. */
+  const seam = Math.max(0, 1 - Math.abs(st.landed - 0.5) / 0.5)
+
   return (
     <div
       className={'w-root' + (st.landed > 0.98 ? ' is-landed' : '')}
       style={{
         ['--w-heat' as string]: st.velocity.toFixed(3),
         ['--w-land' as string]: st.landed.toFixed(3),
+        ['--w-seam' as string]: seam.toFixed(3),
       }}
     >
       {/* Atmosphäre: Grundglut, die auf die Scrollgeschwindigkeit reagiert */}
@@ -130,8 +145,21 @@ export default function ScrollWorld() {
         onJump={(i) => apiRef.current?.jumpTo(i)}
       />
 
-      {/* Copy-Ebene */}
-      <div className="w-copylayer" style={{ opacity: filmOut }}>
+      {/* Copy-Ebene. Sie löst sich beim Landen auf, statt einfach zu
+          verschwinden: sie steigt, wird weich und verliert das Licht. */}
+      <div
+        className="w-copylayer"
+        style={{
+          opacity: copyOut,
+          transform: `translateY(${(st.landed * -7).toFixed(2)}vh) scale(${(
+            1 -
+            st.landed * 0.06
+          ).toFixed(3)})`,
+          // Weichzeichner nur, solange überhaupt etwas zu sehen ist — er ist
+          // teuer und über einer ganzen Bildschirmfläche nicht umsonst.
+          filter: copyOut > 0.01 ? `blur(${(st.landed * 18).toFixed(1)}px)` : 'none',
+        }}
+      >
         {SECTIONS.map((s, i) => {
           const isActive = i === st.active
           const p = isActive ? st.localProgress : i < st.active ? 1 : 0
@@ -145,8 +173,12 @@ export default function ScrollWorld() {
 
           // Die Lichtwelle in der Überschrift läuft in der ersten Hälfte des
           // Akts durch. Der erste Akt zündet stattdessen beim Laden.
+          //
+          // Beim Landen läuft sie wieder heraus: Das Licht verlässt die
+          // Schrift, bevor die Schrift geht. Dieselbe Mechanik wie im Film,
+          // nur rückwärts — das Geschriebene bleibt, das Licht zieht weiter.
           const ignite =
-            i === 0 ? intro : Math.max(0, Math.min(1, p / 0.55))
+            (i === 0 ? intro : Math.max(0, Math.min(1, p / 0.55))) * copyOut
 
           return (
             <article

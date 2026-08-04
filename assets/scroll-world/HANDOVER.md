@@ -11,7 +11,10 @@ Es enthält alle Entscheidungen, die fertigen Prompts und den Pipeline-Ablauf.
 
 Eine durchgehende Kamerafahrt für norman-nerger.de: Eine mechanische Libelle
 erkennt bestehende Strukturen und aktiviert ein Netz, das bereits da ist.
-Leitsatz: **Aus Gewachsenem wird Vernetztes.**
+Leitsatz: **Aus Gewachsenem wird Neues.** (Bis 04.08.2026 „Aus Gewachsenem wird
+Vernetztes" — das Netz ist die Mechanik, nicht das Versprechen. Die Akte heißen
+seitdem nach der Geschichte, nicht nach der Kulisse: „Das Gewachsene" statt
+„Der Ast".)
 
 Technik: **scroll-world** ist führend — vorgerendertes KI-Video, das per Scroll
 gescrubbt wird. Der GSAP/Three.js-Ansatz aus dem ChatGPT-Prompt wurde verworfen.
@@ -290,6 +293,24 @@ vernetzte Stadt) trägt noch, erst nach gut einer halben Bildschirmhöhe hat die
 Seite übernommen. Die Projektbilder sind Standbilder aus dem Film — die Seite
 bleibt in derselben Welt.
 
+**Der Übergang besteht aus vier Bewegungen**, alle an `landed` gehängt:
+
+1. **Die Copy geht zuerst** — und viel schneller als das Bild (`copyOut =
+   1 − landed·3.2`, weg bei 0,31). Sie steigt, wird weich und verliert dabei
+   das Licht: Die Lichtwelle in der Überschrift läuft *rückwärts* heraus
+   (`ignite · copyOut`). Dieselbe Mechanik wie im Film, nur umgekehrt.
+2. **Der Film zieht sich zurück**, statt zu verschwinden: kleiner, mit Kante,
+   dunkler und entsättigt, nach oben weg — die Welt fällt in die Tiefe zurück.
+3. **Der Lichtgrat an der Naht** (`--w-seam`, am hellsten bei `landed` 0,5)
+   sitzt auf der Oberkante der Landeseite und fährt deshalb mit dem Übergang
+   durchs Bild.
+4. **Das Raster zieht sich auf** — was der Film als Netz gezeigt hat, bleibt
+   als Grundraster der Seite liegen.
+
+Das war vorher falsch gelöst: Copy und Bild blendeten gleich schnell ab, und
+halbdurchsichtige Schrift stand mitten in der anfahrenden Seite — der Fehler,
+den man beim Scrollen sofort sieht.
+
 **Die Inhalte sind Platzhalter.** Projekte, Kennzahlen und Kontakt in
 `portfolioConfig.ts` sind erfunden und zeigen nur die Form. Ersetzen, bevor
 irgendetwas live geht.
@@ -302,8 +323,23 @@ irgendetwas live geht.
   Ein CSS-`margin` repariert nur die Optik — `textContent` und damit Kopieren,
   Suchen und Screenreader bleiben kaputt. Es braucht **echte Leerzeichen im DOM**.
 - Das globale `scroll-behavior: smooth` aus `src/index.css` **kollidiert mit dem
-  Scrubbing**. `world.css` setzt es auf `auto` zurück; weiches Scrollen macht die
-  Engine gezielt bei den Rail-Sprüngen.
+  Scrubbing**. Der Reset in `world.css` reichte **nicht**: Tailwind schreibt
+  `@layer base` nicht als echte CSS-Kaskadenschicht heraus, sondern als
+  gewöhnliche Regel — gleiche Spezifität, und wer gewinnt, hängt an der
+  Bundle-Reihenfolge. Real gemessen: `getComputedStyle(html).scrollBehavior`
+  stand auf `smooth`, jeder Sprung wurde animiert und die Kamerafahrt gegen die
+  Animation gescrubbt. Die Regel ist deshalb aus `index.css` **entfernt**;
+  weiches Scrollen setzt die Seite gezielt dort, wo es hingehört.
+- Das **letzte Leg darf hinten nicht ausblenden**. Die Segmente blenden 0,1
+  Viewport hinter ihrem Ende aus — beim letzten wäre das Bild damit schwarz,
+  bevor die Landung (eine ganze Viewport-Höhe) überhaupt läuft. Sein Abgang
+  gehört der Bühne, nicht dem Segment.
+- **Kein IntersectionObserver für das Aufblenden.** Der Ausgangszustand ist
+  unsichtbar; ein Beobachter, der aus irgendeinem Grund nicht mehr meldet,
+  macht die halbe Seite unsichtbar — real passiert, 13 von 17 Elementen kamen
+  an. Die Sichtprüfung läuft jetzt über die Scrollposition: kein Zustand, der
+  kaputtgehen kann, und bei knapp zwanzig Elementen billiger als die
+  Verwaltung des Beobachters.
 - Der Browser stellt beim Neuladen die Scrollposition wieder her → man landet
   mitten im Film. Die Engine setzt `history.scrollRestoration = 'manual'`.
 - Der erste Akt muss **beim Laden von selbst zünden**, sonst steht die
@@ -334,9 +370,10 @@ irgendetwas live geht.
       liegen jetzt auf der Landeseite. `#vorgehen` ist entfallen; der Film
       *ist* das Vorgehen.
 - [ ] **Projekte, Zahlen und Kontakt sind Platzhalter** (`portfolioConfig.ts`).
-- [ ] **Visuelle Abnahme der Landeseite steht aus.** Struktur, Aufklappen,
-      Mobilmenü und die Landungsrechnung sind geprüft; wie es *aussieht*, hat
-      noch niemand gesehen — beim Bau war kein sichtbarer Browser verfügbar.
+- [x] **Visuelle Abnahme der Landeseite** — am Desktop (1440×1270) durchgesehen:
+      Auftakt, Projektliste, Zahlen, Kontakt, Fuß und der Übergang in Stufen.
+- [ ] **Hochkant ist noch nie jemand durchgelaufen.** Die Regeln stehen, gesehen
+      hat es niemand.
 - [ ] Impressum + Datenschutzerklärung. Der Fuß verlinkt bereits auf
       `/impressum` und `/datenschutz` — die Seiten fehlen noch.
 

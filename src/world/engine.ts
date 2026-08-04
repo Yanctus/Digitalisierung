@@ -203,7 +203,11 @@ export function mountWorld(
       s.target = s.linger ? lingerEase(local, s.linger) : local
       let outside = 0
       if (y < s.start) outside = s.start - y
-      else if (y > s.end) outside = y - s.end
+      // Das letzte Leg blendet hinten NICHT aus. Sonst wäre das Bild schon nach
+      // 0,1 Viewport schwarz, während die Landung noch eine ganze Viewport-Höhe
+      // läuft — der Film wäre weg, bevor er sich zurückziehen kann. Sein Abgang
+      // gehört der Bühne (--w-land), nicht dem Segment.
+      else if (y > s.end && i < segs.length - 1) outside = y - s.end
       const op = smooth(1 - outside / fade)
       s.el.style.opacity = String(op)
       s.visible = op > 0.001

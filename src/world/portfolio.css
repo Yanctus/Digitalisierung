@@ -32,8 +32,51 @@
       var(--w-bg) 68vh
     );
 }
+/* ---------- Die Naht ----------
+   Ein Lichtgrat auf der Oberkante der Seite. Weil die Seite von unten
+   hochfährt, fährt er mit — genau dort, wo der Film aufhört und die Seite
+   anfängt. Am hellsten steht er auf halbem Weg (--w-seam), dann ist er weg. */
+.p-land__seam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  height: 1px;
+  pointer-events: none;
+  opacity: var(--w-seam, 0);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(217, 194, 255, 0.9) 16%,
+    #fff 48%,
+    var(--w-orange) 78%,
+    transparent
+  );
+  box-shadow: 0 0 46px 6px rgba(169, 112, 255, 0.6);
+}
+/* Die Aufweitung: Der Grat wirft Licht nach oben in den abtretenden Film. */
+.p-land__seam::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: min(150vw, 1900px);
+  height: 46vh;
+  transform: translate(-50%, 0) scaleY(var(--w-seam, 0));
+  transform-origin: bottom;
+  background: radial-gradient(
+    50% 100% at 50% 100%,
+    rgba(169, 112, 255, 0.45),
+    rgba(255, 154, 77, 0.12) 45%,
+    transparent 72%
+  );
+  opacity: var(--w-seam, 0);
+}
+
 /* Ein Hauch Netz im Grund — dieselbe Rasterlogik wie die Fassade in Akt 2,
-   nur so schwach, dass man es eher spürt als sieht. */
+   nur so schwach, dass man es eher spürt als sieht. Es zieht sich während des
+   Übergangs auf: Was der Film als Netz gezeigt hat, bleibt als Raster liegen. */
 .p-land__veil::after {
   content: '';
   position: absolute;
@@ -42,7 +85,7 @@
     linear-gradient(90deg, rgba(169, 112, 255, 0.6) 1px, transparent 1px),
     linear-gradient(0deg, rgba(169, 112, 255, 0.6) 1px, transparent 1px);
   background-size: 96px 96px;
-  opacity: 0.05;
+  opacity: calc(0.055 * var(--w-land, 1));
   -webkit-mask-image: linear-gradient(180deg, transparent 30vh, #000 70vh, #000 88%, transparent);
   mask-image: linear-gradient(180deg, transparent 30vh, #000 70vh, #000 88%, transparent);
 }

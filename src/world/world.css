@@ -89,13 +89,19 @@ html {
 }
 
 /* ---------- Bühne / Szenen ---------- */
+/* Der Film verschwindet beim Landen nicht, er zieht sich zurück: Er wird
+   kleiner, bekommt eine Kante, verliert Licht und Farbe und rückt nach oben
+   weg — als fiele die ganze Welt wieder in die Tiefe, aus der sie kam. Erst
+   dahinter steht die Seite. */
 .w-stage {
   position: fixed;
   inset: 0;
   z-index: 1;
   overflow: hidden;
-  /* Der Film tritt ab, während die Landeseite hochkommt. */
   opacity: calc(1 - var(--w-land));
+  transform: scale(calc(1 - var(--w-land) * 0.14)) translateY(calc(var(--w-land) * -5vh));
+  border-radius: calc(var(--w-land) * 34px);
+  filter: brightness(calc(1 - var(--w-land) * 0.4)) saturate(calc(1 - var(--w-land) * 0.45));
 }
 /* Ist die Seite endgültig übernommen, hört der Film ganz auf zu dekodieren. */
 .w-root.is-landed .w-stage {

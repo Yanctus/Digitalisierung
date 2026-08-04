@@ -3,17 +3,20 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
+  /* Kein globales `scroll-behavior: smooth`. Tailwind schreibt @layer base
+     nicht als echte CSS-Kaskadenschicht heraus, sondern als gewöhnliche Regel
+     — der Reset in world.css hat dieselbe Spezifität und verliert je nach
+     Bundle-Reihenfolge. Ergebnis: Jeder Sprung wird animiert und die
+     Kamerafahrt wird gegen die Animation gescrubbt. Weiches Scrollen setzt die
+     Seite gezielt dort, wo es hingehört (Engine, Navigation). */
 
   body {
-    @apply bg-[#050a12] text-white antialiased;
+    @apply bg-[#07040f] text-white antialiased;
     font-family: 'Inter', system-ui, sans-serif;
   }
 
   ::selection {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(169, 112, 255, 0.35);
   }
 }
 

@@ -20,41 +20,69 @@ export default function Portfolio({ onReplay }: { onReplay: () => void }) {
 
   /**
    * Alles mit `data-reveal` blendet einmalig auf, wenn es ins Bild kommt.
-   * Ein Beobachter für den ganzen Abschnitt statt einer Ref je Element —
-   * die Liste wächst sonst mit jedem Projekt um Verwaltung.
+   *
+   * Bewusst über die Scrollposition und nicht über einen IntersectionObserver:
+   * Der Ausgangszustand ist unsichtbar, und ein Beobachter, der aus irgendeinem
+   * Grund nicht (mehr) meldet, macht die halbe Seite unsichtbar — genau das ist
+   * beim Bauen passiert. Ein Durchlauf über die Rechtecke ist bei knapp zwanzig
+   * Elementen ohnehin billiger als die Verwaltung des Beobachters, läuft nur
+   * solange noch etwas aussteht, und hat keinen Zustand, der kaputtgehen kann.
    */
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
-    const items = Array.from(root.querySelectorAll<HTMLElement>('[data-reveal]'))
-    // Der Ausgangszustand ist unsichtbar. Wenn nichts aufblenden kann — kein
-    // Beobachter da, Bewegung unerwünscht —, muss alles sofort stehen, sonst
-    // wäre die halbe Seite leer.
-    if (
-      !('IntersectionObserver' in window) ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
-      items.forEach((el) => el.classList.add('is-in'))
+    let pending = Array.from(root.querySelectorAll<HTMLElement>('[data-reveal]'))
+    const showAll = () => pending.forEach((el) => el.classList.add('is-in'))
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      showAll()
       return
     }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (!e.isIntersecting) return
-          e.target.classList.add('is-in')
-          io.unobserve(e.target)
-        })
-      },
-      { rootMargin: '0px 0px -12% 0px', threshold: 0.15 },
-    )
-    items.forEach((el) => io.observe(el))
-    return () => io.disconnect()
+
+    let raf = 0
+    let alive = true
+    const stop = () => {
+      alive = false
+      if (raf) cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+    const sweep = () => {
+      raf = 0
+      if (!alive) return
+      // 0.88 statt 1.0: Das Element soll ein Stück im Bild stehen, bevor es
+      // zündet — sonst blendet alles genau am unteren Rand auf.
+      const line = window.innerHeight * 0.88
+      pending = pending.filter((el) => {
+        const r = el.getBoundingClientRect()
+        if (r.top < line && r.bottom > 0) {
+          el.classList.add('is-in')
+          return false
+        }
+        return true
+      })
+      if (!pending.length) stop()
+    }
+    function onScroll() {
+      if (!raf && alive) raf = requestAnimationFrame(sweep)
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    sweep()
+    return stop
   }, [])
 
   return (
     <section className="p-land" id="projekte" ref={rootRef}>
       {/* Der Übergang: oben trägt noch der letzte Frame des Films, unten die Seite. */}
       <div className="p-land__veil" aria-hidden="true" />
+
+      {/* Die Naht. Sie sitzt auf der Oberkante der Seite und fährt deshalb
+          genau mit dem Übergang durchs Bild: ein Lichtgrat, der auf halbem
+          Weg am hellsten steht — dort, wo der Film sich auflöst und die Seite
+          übernimmt. Die Stärke kommt als --w-seam von der Engine. */}
+      <div className="p-land__seam" aria-hidden="true" />
 
       <div className="p-wrap">
         <header className="p-intro">
@@ -223,7 +251,7 @@ export default function Portfolio({ onReplay }: { onReplay: () => void }) {
             <a href="/impressum">Impressum</a>
             <a href="/datenschutz">Datenschutz</a>
           </nav>
-          <span className="p-foot__note">Aus gewachsen wird vernetzt.</span>
+          <span className="p-foot__note">Aus Gewachsenem wird Neues.</span>
         </footer>
       </div>
     </section>
