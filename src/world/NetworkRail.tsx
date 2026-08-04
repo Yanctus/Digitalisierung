@@ -14,12 +14,15 @@ export default function NetworkRail({
   sections,
   active,
   progress,
+  landed,
   onJump,
 }: {
   sections: WorldSection[]
   active: number
   /** 0..1 über die gesamte Fahrt. */
   progress: number
+  /** 0..1 — beim Landen tritt die Schiene ab, die Seite übernimmt. */
+  landed: number
   onJump: (i: number) => void
 }) {
   // Position jedes Knotens auf der Schiene, gewichtet nach Scrollweg —
@@ -34,7 +37,16 @@ export default function NetworkRail({
   })
 
   return (
-    <nav className="w-rail" aria-label="Akte der Reise">
+    <nav
+      className="w-rail"
+      aria-label="Akte der Reise"
+      style={{
+        opacity: 1 - landed,
+        pointerEvents: landed > 0.4 ? 'none' : 'auto',
+        transform: `translateY(-50%) translateX(${(landed * 46).toFixed(1)}px)`,
+      }}
+      aria-hidden={landed > 0.6}
+    >
       <span className="w-rail__line" aria-hidden="true" />
       <span
         className="w-rail__line w-rail__line--lit"

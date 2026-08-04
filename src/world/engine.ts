@@ -37,6 +37,12 @@ export type WorldState = {
   localProgress: number
   /** Geglättete Scrollgeschwindigkeit, 0..1 — treibt die Glut. */
   velocity: number
+  /**
+   * 0..1 — die Landung nach dem Film. 0, solange die Kamera fliegt; 1, sobald
+   * die Seite unter dem Film vollständig hochgeschoben ist. Treibt das
+   * Ausblenden von Bühne, Copy und Schiene.
+   */
+  landed: number
 }
 
 type Seg = Leg & {
@@ -74,6 +80,12 @@ function lingerEase(t: number, amount: number) {
 
 export function mountWorld(
   stage: HTMLElement,
+  /**
+   * Die Scrollstrecke des Films. Sie kommt von außen, weil nach ihr im
+   * Dokumentfluss die Landeseite steht — eine von der Engine selbst angehängte
+   * Strecke läge dahinter und würde die Seite verdoppeln.
+   */
+  track: HTMLElement,
   legs: Leg[],
   onState: (s: WorldState) => void,
 ) {
@@ -111,10 +123,6 @@ export function mountWorld(
   let lastY = window.scrollY
   let lastT = performance.now()
   let vel = 0
-
-  const track = document.createElement('div')
-  track.className = 'w-track'
-  stage.parentElement!.appendChild(track)
 
   function layout() {
     vh = window.innerHeight
@@ -217,11 +225,16 @@ export function mountWorld(
     lastY = y
     lastT = now
 
+    // Nach dem letzten Leg folgt eine Viewport-Höhe Auslauf, und genau darüber
+    // schiebt sich die Landeseite ins Bild. Über dieselbe Strecke blenden Bühne,
+    // Copy und Schiene ab — der Film übergibt, statt abzubrechen.
+    const filmEnd = totalW * vh
     onState({
-      progress: clamp(y / (totalW * vh || 1)),
+      progress: clamp(y / (filmEnd || 1)),
       active: ci,
       localProgress,
       velocity: vel,
+      landed: clamp((y - filmEnd) / (vh || 1)),
     })
     ticking = false
   }
@@ -260,6 +273,21 @@ export function mountWorld(
     layout()
   }
 
+  /**
+   * Wird die Seite in einem Fenster ohne Höhe eingehängt — verstecktes Tab,
+   * noch nicht gezeichnetes Panel, Einbettung — dann ist `innerHeight` beim
+   * ersten Layout 0 und die Scrollstrecke bliebe auf 0 stehen: Der Film wäre
+   * weg und die Landeseite stünde direkt oben. Ein `resize` kommt in dem Fall
+   * nicht zuverlässig, der Beobachter dagegen schon.
+   */
+  const ro =
+    typeof ResizeObserver !== 'undefined'
+      ? new ResizeObserver(() => {
+          if (window.innerHeight !== vh || window.innerWidth !== laidOutW) layout()
+        })
+      : null
+  ro?.observe(document.documentElement)
+
   function onFirstTouch() {
     userReady = true
     segs.forEach((s) => s.video && prime(s.video))
@@ -284,6 +312,7 @@ export function mountWorld(
 
   function destroy() {
     cancelAnimationFrame(rafId)
+    ro?.disconnect()
     window.removeEventListener('scroll', onScroll)
     window.removeEventListener('resize', onResize)
     window.removeEventListener('orientationchange', layout)
@@ -292,7 +321,8 @@ export function mountWorld(
       if (s.video) URL.revokeObjectURL(s.video.src)
       s.el.remove()
     })
-    track.remove()
+    // Die Strecke gehört React, nicht der Engine — nur ihre Höhe zurücksetzen.
+    track.style.height = ''
   }
 
   return { jumpTo, destroy, reduce }

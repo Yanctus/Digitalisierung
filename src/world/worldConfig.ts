@@ -134,9 +134,11 @@ export const SECTIONS: WorldSection[] = [
     title: 'Aus gewachsen wird vernetzt.',
     body:
       'Digitalisierungsbegleitung für Unternehmen, die etwas aufgebaut haben und es behalten wollen. Reden wir darüber, was bei Ihnen schon da ist.',
+    // Die Ziele existieren jetzt wirklich: beide Abschnitte liegen auf der
+    // Landeseite unter dem Film.
     cta: {
       primary: { label: 'Gespräch vereinbaren', href: '#kontakt' },
-      secondary: { label: 'Wie ich arbeite', href: '#vorgehen' },
+      secondary: { label: 'Projekte ansehen', href: '#projekte' },
     },
   },
 ]

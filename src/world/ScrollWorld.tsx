@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { mountWorld, type WorldState } from './engine'
 import { SECTIONS } from './worldConfig'
 import IgnitionText from './IgnitionText'
 import NetworkRail from './NetworkRail'
 import TrailCursor from './TrailCursor'
+import TopNav from './TopNav'
+import Portfolio from './Portfolio'
 
 /**
  * Die Seite als Kamerafahrt: Scrollen treibt die Zeit, die Kamera fliegt.
@@ -11,15 +13,22 @@ import TrailCursor from './TrailCursor'
  * Die Copy liegt fest über dem Video und wird pro Akt ein- und ausgeblendet.
  * Der erste Akt begrüßt beim Landen, der letzte hält seinen CTA — dazwischen
  * hat jeder Akt seinen Höhepunkt in der Mitte seines Scrollwegs.
+ *
+ * Nach dem letzten Leg endet der Film nicht, er übergibt: Über die letzte
+ * Viewport-Höhe der Scrollstrecke schiebt sich die Landeseite (`Portfolio`)
+ * unter dem Film hervor, während Bühne, Copy und Schiene abblenden. Der Wert
+ * dafür ist `landed` aus der Engine.
  */
 export default function ScrollWorld() {
   const stageRef = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
   const apiRef = useRef<ReturnType<typeof mountWorld> | null>(null)
   const [st, setSt] = useState<WorldState>({
     progress: 0,
     active: 0,
     localProgress: 0,
     velocity: 0,
+    landed: 0,
   })
   /**
    * Der erste Akt zündet beim Laden von selbst durch. Ohne das stünde die
@@ -44,9 +53,10 @@ export default function ScrollWorld() {
   }, [])
 
   useEffect(() => {
-    if (!stageRef.current) return
+    if (!stageRef.current || !trackRef.current) return
     const api = mountWorld(
       stageRef.current,
+      trackRef.current,
       SECTIONS.map((s) => ({
         clip: s.clip,
         still: s.still,
@@ -59,10 +69,29 @@ export default function ScrollWorld() {
     return () => api.destroy()
   }, [])
 
+  const goto = useCallback((id: string) => {
+    const el = document.getElementById(id)
+    if (!el) return
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
+  }, [])
+
+  const replay = useCallback(() => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
+  }, [])
+
+  // Der Film tritt ab, während die Landeseite hochkommt: eine Größe, überall
+  // gleich verwendet — Bühne, Himmel, Copy und Schiene hängen daran.
+  const filmOut = 1 - st.landed
+
   return (
     <div
-      className="w-root"
-      style={{ ['--w-heat' as string]: st.velocity.toFixed(3) }}
+      className={'w-root' + (st.landed > 0.98 ? ' is-landed' : '')}
+      style={{
+        ['--w-heat' as string]: st.velocity.toFixed(3),
+        ['--w-land' as string]: st.landed.toFixed(3),
+      }}
     >
       {/* Atmosphäre: Grundglut, die auf die Scrollgeschwindigkeit reagiert */}
       <div className="w-sky" aria-hidden="true">
@@ -73,27 +102,36 @@ export default function ScrollWorld() {
       {/* Die Bühne — hier hängt die Engine ihre Szenen ein */}
       <div className="w-stage" ref={stageRef} />
 
+      {/* Feines Korn über allem: nimmt dem Video die digitale Glätte */}
+      <div className="w-grain" aria-hidden="true" />
+
+      {/* Scrollstrecke des Films. Die Engine setzt nur ihre Höhe. */}
+      <div className="w-track" ref={trackRef} />
+
+      {/* Danach: die Seite */}
+      <Portfolio onReplay={replay} />
+
       <TrailCursor />
 
-      <header className="w-top">
-        <a className="w-brand" href="#top">
-          <span className="w-brand__mark" aria-hidden="true" />
-          <span className="w-brand__name">Norman Nerger</span>
-        </a>
-        <a className="w-top__cta" href="#kontakt">
-          Gespräch vereinbaren
-        </a>
-      </header>
+      <TopNav
+        sections={SECTIONS}
+        active={st.active}
+        progress={st.progress}
+        landed={st.landed}
+        onJump={(i) => apiRef.current?.jumpTo(i)}
+        onGoto={goto}
+      />
 
       <NetworkRail
         sections={SECTIONS}
         active={st.active}
         progress={st.progress}
+        landed={st.landed}
         onJump={(i) => apiRef.current?.jumpTo(i)}
       />
 
       {/* Copy-Ebene */}
-      <div className="w-copylayer">
+      <div className="w-copylayer" style={{ opacity: filmOut }}>
         {SECTIONS.map((s, i) => {
           const isActive = i === st.active
           const p = isActive ? st.localProgress : i < st.active ? 1 : 0
@@ -117,7 +155,7 @@ export default function ScrollWorld() {
               style={{
                 opacity: op,
                 transform: `translateY(${((0.5 - p) * 3).toFixed(2)}vh)`,
-                pointerEvents: op > 0.5 ? 'auto' : 'none',
+                pointerEvents: op > 0.5 && filmOut > 0.5 ? 'auto' : 'none',
               }}
               aria-hidden={op < 0.05}
             >
@@ -146,13 +184,21 @@ export default function ScrollWorld() {
 
               {s.cta && (
                 <div className="w-copy__cta">
-                  <a className="w-btn w-btn--primary" href={s.cta.primary.href}>
+                  <button
+                    type="button"
+                    className="w-btn w-btn--primary"
+                    onClick={() => goto('kontakt')}
+                  >
                     {s.cta.primary.label}
-                  </a>
+                  </button>
                   {s.cta.secondary && (
-                    <a className="w-btn" href={s.cta.secondary.href}>
+                    <button
+                      type="button"
+                      className="w-btn"
+                      onClick={() => goto('projekte')}
+                    >
                       {s.cta.secondary.label}
-                    </a>
+                    </button>
                   )}
                 </div>
               )}

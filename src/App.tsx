@@ -1,5 +1,6 @@
 import ScrollWorld from './world/ScrollWorld'
 import './world/world.css'
+import './world/portfolio.css'
 
 /**
  * Eine durchgehende Kamerafahrt vom Ast bis über die vernetzte Stadt.

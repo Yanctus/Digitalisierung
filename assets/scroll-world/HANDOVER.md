@@ -253,10 +253,14 @@ Dateien liegen noch da, werden aber nicht mehr eingebunden.
 | `src/world/engine.ts` | Scrub-Engine, auf Architektur A zugeschnitten (keine Connectors) |
 | `src/world/ScrollWorld.tsx` | Setzt alles zusammen, hält den Zustand |
 | `src/world/worldConfig.ts` | Die acht Akte: Scrollweg, Linger, Copy |
+| `src/world/TopNav.tsx` | Kopfzeile: Fortschrittsrahmen, Akt-Anzeige, Netz-Menü, Mobilmenü |
+| `src/world/Portfolio.tsx` | Die Landeseite nach dem Film: Projekte, Zahlen, Kontakt |
+| `src/world/portfolioConfig.ts` | Projekte/Zahlen/Kontakt — **derzeit Platzhalter** |
 | `src/world/NetworkRail.tsx` | Navigation als wachsendes Netz |
 | `src/world/IgnitionText.tsx` | Zündende Typografie |
 | `src/world/TrailCursor.tsx` | Schweif am Mauszeiger |
-| `src/world/world.css` | Palette und Layout |
+| `src/world/world.css` | Palette und Layout des Films |
+| `src/world/portfolio.css` | Layout der Landeseite |
 | `public/world/vid/leg0–7.mp4` | Clips, fürs Scrubbing enkodiert (crf 20, `-g 8`, faststart, `-an`) |
 | `public/world/still/leg0–7.jpg` | Poster, jeweils Frame 0 des Legs |
 
@@ -269,6 +273,26 @@ Standbild bleibt bis der Clip wirklich malt, iOS-Priming beim ersten Touch.
 wächst zum Netz, Überschriften werden buchstabenweise entzündet statt
 eingeblendet (dieselbe Regel wie im Film — nichts entsteht, Licht legt sich nur
 darüber), der Mauszeiger zieht den Schweif der Libelle.
+
+### Die Landung (gebaut 04.08.2026, zweiter Durchgang)
+
+Der Film endet nicht mehr, er **übergibt**. Nach dem letzten Leg folgt eine
+Viewport-Höhe Auslauf, und über genau diese Strecke schiebt sich die Landeseite
+unter dem Film hervor, während Bühne, Copy und Schiene abblenden. Die Größe
+dafür ist `landed` (0..1) aus der Engine; alles hängt an ihr.
+
+Damit das geht, gehört die Scrollstrecke (`.w-track`) jetzt **React**, nicht
+mehr der Engine — sie wird als Ref hineingereicht. Vorher hängte die Engine sie
+selbst ans Ende von `.w-root`, dann läge jede Seite danach im DOM *darüber*.
+
+Der obere Rand der Landeseite ist bewusst durchsichtig: Der letzte Frame (die
+vernetzte Stadt) trägt noch, erst nach gut einer halben Bildschirmhöhe hat die
+Seite übernommen. Die Projektbilder sind Standbilder aus dem Film — die Seite
+bleibt in derselben Welt.
+
+**Die Inhalte sind Platzhalter.** Projekte, Kennzahlen und Kontakt in
+`portfolioConfig.ts` sind erfunden und zeigen nur die Form. Ersetzen, bevor
+irgendetwas live geht.
 
 ### Fallstricke beim Bau (alle real aufgetreten)
 
@@ -284,6 +308,16 @@ darüber), der Mauszeiger zieht den Schweif der Libelle.
   mitten im Film. Die Engine setzt `history.scrollRestoration = 'manual'`.
 - Der erste Akt muss **beim Laden von selbst zünden**, sonst steht die
   Hauptüberschrift auf der Startansicht gedämpft da.
+- Wird die Seite in einem Fenster **ohne Höhe** eingehängt (verstecktes Tab,
+  nicht gezeichnetes Vorschaupanel), ist `innerHeight` beim ersten Layout 0 und
+  die Scrollstrecke bleibt auf 0 stehen: kein Film, die Landeseite steht direkt
+  oben. Ein `resize` kommt in dem Fall nicht zuverlässig — die Engine hängt
+  deshalb zusätzlich einen `ResizeObserver` an `documentElement`.
+- Ein aufklappbares Panel über `grid-template-rows: 0fr → 1fr` faltet sein
+  **padding nicht mit**: Der zugeklappte Zustand bleibt genau um diesen Betrag
+  offen stehen. Der Abstand muss als `margin` der Kinder kommen.
+- Alles mit `data-reveal` startet unsichtbar. Fehlt der `IntersectionObserver`,
+  bliebe die halbe Seite leer — dieser Fall setzt alles sofort sichtbar.
 - Die Clips sind stellenweise sehr hell (Lichttor, Flutung) → Abdunkelungsverlauf
   und Textschatten mussten deutlich kräftiger als üblich ausfallen, hochkant noch
   stärker als am Desktop.
@@ -296,9 +330,15 @@ darüber), der Mauszeiger zieht den Schweif der Libelle.
       gerenderte 9:16-Kette vor (`clipMobile`). Aktuell wird der Querformat-Clip
       mittig beschnitten — funktioniert, weil die Libelle zentral bleibt, ist
       aber nicht dasselbe. Verdoppelt die Videokosten.
-- [ ] **CTA-Ziele zeigen ins Leere** (`#kontakt`, `#vorgehen`) — es gibt noch
-      keine Unterseiten oder Abschnitte dafür.
-- [ ] Impressum + Datenschutzerklärung.
+- [x] **CTA-Ziele zeigen ins Leere** — erledigt: `#projekte` und `#kontakt`
+      liegen jetzt auf der Landeseite. `#vorgehen` ist entfallen; der Film
+      *ist* das Vorgehen.
+- [ ] **Projekte, Zahlen und Kontakt sind Platzhalter** (`portfolioConfig.ts`).
+- [ ] **Visuelle Abnahme der Landeseite steht aus.** Struktur, Aufklappen,
+      Mobilmenü und die Landungsrechnung sind geprüft; wie es *aussieht*, hat
+      noch niemand gesehen — beim Bau war kein sichtbarer Browser verfügbar.
+- [ ] Impressum + Datenschutzerklärung. Der Fuß verlinkt bereits auf
+      `/impressum` und `/datenschutz` — die Seiten fehlen noch.
 
 ### Was als Nächstes ansteht
 
