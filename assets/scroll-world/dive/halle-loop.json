@@ -1,0 +1,27 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Stylised painterly 3D illustration with the graphic language of a hand-painted game world - bold silhouettes, simplified sculpted forms, soft painterly surfaces without fine photoreal texture detail, and strong contrast between deep shadow and glowing accent light. Deep violet and midnight-blue water throughout, structures and living light in royal and electric violet. Warm orange reserved for lantern light, backlight, rim light and highlights - present but never dominant. Underwater: drifting particles, soft god rays from far above, volumetric haze, soft bloom, subtle film grain. No text, no letters, no logos, no signage. SCENE: A wide hall grown inside a giant coral and kelp structure. The shot is a PERFECT SEAMLESS LOOP: it begins and ends on exactly the same image, and every movement inside it returns to its starting position by the end. Kelp strands sway out and come back, particles drift in a slow closed circulation, and each fish swims a complete circular path that returns it to the exact spot and pose it started from. Nothing enters the frame and nothing leaves it. CAMERA: locked on a tripod for the entire shot - no pan, no tilt, no dolly, no zoom, no orbit, no drift. The framing of the last frame is identical to the framing of the first frame."
+    },
+    {
+      "type": "image_url",
+      "image_url": {
+        "url": "https://sfs.monid.ai/S-RZ2jsNodbio2c4sAPv4Yr-p6uhzthdLMlXBv_tbIR6RqDVQAUdSNs1NpyPINFcJUV6gvYQlUeFRiDmMHhatkHeZjXJE7sSvAMTvkCIZidWCjBN_h6BQhZuRk0pS-07BA6bRSxjaL2D3k7e5mHk6_yMMZ2L7bKIcLmzSptbN2SwsVD44LBwF2mWLH-5RMmx?e=1785881682"
+      },
+      "role": "first_frame"
+    },
+    {
+      "type": "image_url",
+      "image_url": {
+        "url": "https://sfs.monid.ai/S-RZ2jsNodbio2c4sAPv4Yr-p6uhzthdLMlXBv_tbIR6RqDVQAUdSNs1NpyPINFcJUV6gvYQlUeFRiDmMHhatkHeZjXJE7sSvAMTvkCIZidWCjBN_h6BQhZuRk0pS-07BA6bRSxjaL2D3k7e5mHk6_yMMZ2L7bKIcLmzSptbN2SwsVD44LBwF2mWLH-5RMmx?e=1785881682"
+      },
+      "role": "last_frame"
+    }
+  ],
+  "resolution": "480p",
+  "ratio": "16:9",
+  "duration": 10,
+  "generate_audio": false,
+  "watermark": false
+}

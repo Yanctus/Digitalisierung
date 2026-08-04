@@ -24,19 +24,16 @@
   opacity: 1;
   pointer-events: auto;
 }
-/* Der Tauchgang liegt über allem und blendet hart auf — er ist der Schnitt. */
-.d-layer--dive {
+/* Tauchgang und Auftauchen liegen über allem und sind der Schnitt selbst.
+   Kurze Blende: Sie laufen schon, wenn sie erscheinen. */
+.d-layer--dive,
+.d-layer--rise {
   z-index: 5;
-  transition: opacity 0.25s linear;
+  transition: opacity 0.2s linear;
 }
-.d-root.is-diving .d-layer--dive {
+.d-root.is-diving .d-layer--dive,
+.d-root.is-rising .d-layer--rise {
   opacity: 1;
-}
-/* Beim Tauchen zieht sich die Welt leicht zusammen: der Sog. */
-.d-root.is-diving .d-layer--world,
-.d-root.is-room .d-layer--world {
-  transform: scale(1.06);
-  transition: transform 1.2s cubic-bezier(0.16, 0.84, 0.28, 1);
 }
 
 /* Das Videobild auf „cover" gerechnet — die Punkte liegen in Prozent DIESES
@@ -204,6 +201,97 @@
   text-shadow: 0 1px 3px rgba(5, 3, 13, 0.95), 0 0 26px rgba(5, 3, 13, 0.9);
 }
 
+/* ---------- Der Raum als Seite ----------
+   Die Schleife bleibt oben stehen, der Text zieht darüber. Der Scrollbereich
+   liegt in der Ebene selbst, nicht im Dokument — die Welt darunter behält
+   dadurch ihre eigene Position. */
+.d-layer--room {
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+.d-room {
+  position: relative;
+}
+.d-room__hero {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+}
+/* Absolut zum Scrollinhalt, nicht zum klebenden Kopf — dadurch wandern beide
+   beim Weiterlesen nach oben aus dem Bild. */
+.d-room__head {
+  position: absolute;
+  z-index: 3;
+  left: clamp(20px, 4vw, 56px);
+  top: calc(clamp(74px, 11vh, 120px) + env(safe-area-inset-top));
+  max-width: min(46ch, 52vw);
+  pointer-events: none;
+}
+.d-room__more {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: calc(100vh - 60px);
+  transform: translateX(-50%);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--w-ink-soft);
+  pointer-events: none;
+}
+.d-room__more::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 22px;
+  margin: 9px auto 0;
+  background: linear-gradient(180deg, var(--w-violet-bright), transparent);
+}
+.d-room__exit {
+  position: fixed;
+  z-index: 8;
+}
+
+.d-page {
+  position: relative;
+  z-index: 2;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: clamp(48px, 8vh, 96px) clamp(20px, 5vw, 40px) clamp(60px, 12vh, 130px);
+  /* Oben durchsichtig, damit die Schleife noch eine Weile trägt. */
+  background: linear-gradient(180deg, transparent, rgba(5, 3, 13, 0.92) 22vh, #05030d 46vh);
+}
+.d-page__lead {
+  margin: 0;
+  font-size: clamp(1.15rem, 1.9vw, 1.5rem);
+  line-height: 1.5;
+  letter-spacing: -0.015em;
+  color: var(--w-ink);
+}
+.d-page__block {
+  margin-top: clamp(34px, 5vh, 56px);
+  padding-top: clamp(22px, 3vh, 30px);
+  border-top: 1px solid var(--w-line);
+}
+.d-page__block h3 {
+  margin: 0;
+  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--w-violet-bright);
+}
+.d-page__block p {
+  margin: 12px 0 0;
+  font-size: 1rem;
+  line-height: 1.68;
+  color: var(--w-ink-soft);
+}
+.d-page__end {
+  margin-top: clamp(40px, 6vh, 70px);
+}
+
 /* Bei offenem Text rückt der Ausgang nach links — sonst liegt er darunter. */
 .d-root.has-panel .t-cham__close {
   right: calc(min(430px, 42vw) + clamp(18px, 3vw, 40px));
@@ -228,12 +316,15 @@
   color: var(--w-ink);
 }
 
-/* Beim Tauchen tritt alle Oberfläche ab — nur das Bild zählt. */
+/* Während der Fahrt tritt alle Oberfläche ab — nur das Bild zählt. */
 .d-root.is-diving .d-intro,
 .d-root.is-diving .d-back,
-.d-root.is-diving .d-vignette {
+.d-root.is-diving .d-vignette,
+.d-root.is-rising .d-intro,
+.d-root.is-rising .d-back,
+.d-root.is-rising .d-vignette {
   opacity: 0;
-  transition: opacity 0.3s linear;
+  transition: opacity 0.25s linear;
 }
 
 @media (max-width: 860px) {

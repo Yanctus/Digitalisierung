@@ -42,9 +42,13 @@ export type Place = {
   claim: string
   /** Fehlt beides, ist der Ort angelegt, aber noch nicht gerendert. */
   dive?: string
+  /** Derselbe Tauchgang als fertig umgekehrte Datei — der Rückweg. */
+  rise?: string
   room?: string
   poster?: string
   hotspots?: DiveHotspot[]
+  /** Der Text, der unter der Schleife liegt, wenn man im Raum weiterscrollt. */
+  page?: { lead: string; blocks: { title: string; body: string }[] }
 }
 
 export const WORLD = {
@@ -63,6 +67,7 @@ export const PLACES: Place[] = [
     name: 'Die Kuppelhalle',
     claim: 'Ein funktionierender Prozess ist nicht automatisch ein guter Prozess.',
     dive: '/dive/vid/tauchgang.mp4',
+    rise: '/dive/vid/auftauchen.mp4',
     room: '/dive/vid/halle.mp4',
     poster: '/dive/still/halle.jpg',
     hotspots: [
@@ -91,6 +96,23 @@ export const PLACES: Place[] = [
         body: 'Beratung, die von oben Licht hereinlässt und wieder geht, ändert nichts. Das Licht muss von innen kommen — deshalb ist die Übergabe kein Anhang des Projekts, sondern sein Ziel.',
       },
     ],
+    page: {
+      lead: 'Die häufigste Fehlannahme in gewachsenen Betrieben ist, dass ein Ablauf gut sein muss, weil er seit Jahren läuft. Läuft heißt nur: Es ist noch niemandem zu teuer geworden.',
+      blocks: [
+        {
+          title: 'Woran man einen Ablauf erkennt, der nur noch läuft',
+          body: 'Es gibt eine Person, ohne die er stehenbleibt. Es gibt mindestens einen Schritt, den niemand erklären kann. Und es gibt eine Liste, die jemand täglich pflegt, damit ein System mit einem anderen übereinstimmt. Jedes dieser drei Zeichen kostet Geld, das in keiner Auswertung auftaucht.',
+        },
+        {
+          title: 'Was zuerst passiert',
+          body: 'Sechs bis acht Wochen mitlaufen und aufschreiben, was tatsächlich geschieht — nicht, was im Organigramm steht. Erst danach wird entschieden, und zwar gemeinsam. Vorher fällt keine Entscheidung über Software.',
+        },
+        {
+          title: 'Was am Ende bleibt',
+          body: 'Ein Ablauf, den mehrere Menschen vollständig gehen können, dokumentiert von denen, die ihn gehen. Kein Handbuch, das niemand liest, sondern ein Weg, der auch dann funktioniert, wenn jemand ausfällt.',
+        },
+      ],
+    },
   },
   // Noch nicht gerendert — die Punkte stehen, damit sichtbar ist, wie die
   // fertige Welt aussieht. Je Ort fehlen ein Tauchgang (~$0,35) und ein
