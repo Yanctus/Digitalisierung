@@ -1,0 +1,628 @@
+/* ==========================================================================
+   Der Baum — begehbare Welt (Prototyp)
+
+   Erbt Palette, Himmel, Bühne und Korn von world.css (.w-root liegt mit auf
+   dem Wurzelelement). Hier steht nur, was der Baum zusätzlich braucht:
+   die Karte, der Pitch am Stamm, die Mündung — und die Kammer.
+   ========================================================================== */
+
+.t-root {
+  --t-ratio: 1.7419; /* 864 / 496 — Seitenverhältnis der Clips */
+}
+
+.t-track {
+  pointer-events: none;
+}
+
+/* ---------- Kopfzeile ---------- */
+.t-top {
+  position: fixed;
+  z-index: 60;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(14px, 2vw, 24px) clamp(16px, 3vw, 38px);
+  padding-top: calc(clamp(14px, 2vw, 24px) + env(safe-area-inset-top));
+  background: linear-gradient(180deg, rgba(7, 4, 15, 0.85), transparent);
+}
+.t-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--w-ink-soft);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.t-back:hover {
+  color: var(--w-ink);
+}
+.t-back__arrow {
+  position: relative;
+  width: 16px;
+  height: 1px;
+  background: currentColor;
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.t-back__arrow::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-bottom: 1px solid currentColor;
+  border-left: 1px solid currentColor;
+  transform: rotate(45deg);
+}
+.t-back:hover .t-back__arrow {
+  transform: translateX(-4px);
+}
+.t-top__title {
+  font-family: var(--w-serif);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--w-violet-bright);
+}
+.t-top__count {
+  font-family: var(--w-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--w-ink-soft);
+}
+.t-top__count em {
+  font-style: normal;
+  color: var(--w-orange);
+}
+
+/* ---------- Die Karte (links, damit sie sich von der Reise unterscheidet) --- */
+.t-map {
+  position: fixed;
+  z-index: 45;
+  left: clamp(16px, 2.6vw, 40px);
+  top: 50%;
+  transform: translateY(-50%);
+  height: min(58vh, 500px);
+  width: 1px;
+}
+.t-map__line {
+  position: absolute;
+  inset: 0;
+  background: rgba(217, 194, 255, 0.16);
+}
+.t-map__line i {
+  position: absolute;
+  inset: 0;
+  transform-origin: top;
+  background: linear-gradient(180deg, var(--w-violet-bright), var(--w-violet));
+  box-shadow: 0 0 12px rgba(169, 112, 255, 0.7);
+}
+.t-map__node {
+  position: absolute;
+  left: 0;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 7px;
+  cursor: pointer;
+  color: var(--w-ink-soft);
+}
+.t-map__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(217, 194, 255, 0.22);
+  transition: background 0.35s, box-shadow 0.35s, transform 0.35s;
+}
+/* Eine Station mit Kammer trägt einen Ring — man sieht der Karte an, wo es
+   etwas zu betreten gibt. */
+.t-map__node.has-chamber .t-map__dot {
+  box-shadow: 0 0 0 4px rgba(169, 112, 255, 0.18);
+}
+.t-map__node.is-active .t-map__dot {
+  background: var(--w-violet-bright);
+  transform: scale(1.6);
+  box-shadow: 0 0 18px var(--w-violet);
+}
+.t-map__node.is-visited .t-map__dot {
+  background: var(--w-orange);
+  box-shadow: 0 0 16px var(--w-orange);
+}
+.t-map__label {
+  position: absolute;
+  left: 20px;
+  white-space: nowrap;
+  font-size: 0.76rem;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.28s, transform 0.28s, color 0.28s;
+}
+.t-map__node:hover .t-map__label,
+.t-map__node.is-active .t-map__label {
+  opacity: 1;
+  transform: none;
+  color: var(--w-ink);
+}
+
+/* ---------- Der Pitch am Stamm ---------- */
+.t-copylayer {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+.t-copylayer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: min(62vw, 860px);
+  background: linear-gradient(
+    90deg,
+    rgba(7, 4, 15, 0.93) 0%,
+    rgba(7, 4, 15, 0.84) 36%,
+    rgba(7, 4, 15, 0.5) 66%,
+    transparent 100%
+  );
+}
+.t-copy {
+  position: absolute;
+  left: clamp(52px, 8vw, 110px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(46vw, 540px);
+  opacity: 0;
+  transition: opacity 0.2s linear;
+}
+.t-copy__num {
+  font-family: var(--w-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--w-violet-bright);
+}
+.t-copy__num span {
+  color: var(--w-ink-soft);
+  opacity: 0.65;
+}
+.t-copy__name {
+  margin: 16px 0 0;
+  font-size: clamp(1.9rem, 4.2vw, 3.3rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.032em;
+  text-shadow: 0 2px 24px rgba(7, 4, 15, 0.92);
+}
+.t-copy__claim {
+  margin: 18px 0 0;
+  max-width: 40ch;
+  font-size: clamp(1rem, 1.3vw, 1.16rem);
+  line-height: 1.58;
+  color: rgba(246, 243, 255, 0.9);
+  text-shadow: 0 1px 3px rgba(7, 4, 15, 0.95), 0 0 26px rgba(7, 4, 15, 0.85);
+}
+
+/* Die Mündung. Sie ist immer da, aber sie „öffnet" sich erst dort, wo die
+   Kamera ohnehin verweilt — vorher ist sie ein dunkler Knoten. */
+.t-enter {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+  appearance: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.93rem;
+  font-weight: 600;
+  color: var(--w-ink);
+  padding: 13px 24px;
+  border-radius: 999px;
+  border: 1px solid rgba(217, 194, 255, 0.24);
+  background: rgba(20, 10, 38, 0.5);
+  backdrop-filter: blur(8px);
+  opacity: 0.45;
+  transform: translateY(4px);
+  transition: opacity 0.5s, transform 0.5s, border-color 0.35s, box-shadow 0.4s;
+  pointer-events: auto;
+}
+.t-enter.is-ready {
+  opacity: 1;
+  transform: none;
+  border-color: rgba(217, 194, 255, 0.5);
+  box-shadow: 0 10px 40px -14px rgba(169, 112, 255, 0.9);
+}
+.t-enter:hover {
+  border-color: var(--w-violet-bright);
+}
+.t-enter__node {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(217, 194, 255, 0.35);
+  transition: background 0.35s, box-shadow 0.35s;
+}
+.t-enter.is-ready .t-enter__node {
+  background: var(--w-violet-bright);
+  box-shadow: 0 0 14px var(--w-violet);
+  animation: tPulse 2.4s ease-in-out infinite;
+}
+.t-enter.is-visited .t-enter__node {
+  background: var(--w-orange);
+  box-shadow: 0 0 14px var(--w-orange);
+}
+@keyframes tPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.45); }
+}
+
+.t-hint {
+  position: fixed;
+  z-index: 40;
+  left: 50%;
+  bottom: calc(26px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--w-ink-soft);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Die Kammer
+   ========================================================================== */
+.t-cham {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  overflow: hidden;
+  /* Kein Durchreichen der Wischgeste an den Stamm dahinter. */
+  overscroll-behavior: contain;
+  touch-action: none;
+  background: var(--w-bg);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.t-cham.is-in {
+  opacity: 1;
+}
+
+/* Das Videobild, exakt auf „cover" gerechnet — die Klickpunkte liegen in
+   Prozent DIESES Rechtecks, nicht des Fensters. Sonst wandern sie, sobald
+   das Fenster ein anderes Format hat als der Clip. */
+.t-cham__frame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100vw, calc(100vh * var(--t-ratio)));
+  height: max(100vh, calc(100vw / var(--t-ratio)));
+  transform: translate(-50%, -50%) scale(1.1);
+  transition: transform 0.9s cubic-bezier(0.16, 0.84, 0.28, 1);
+}
+.t-cham.is-in .t-cham__frame {
+  transform: translate(-50%, -50%) scale(1);
+}
+.t-cham__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.t-cham__vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% 50%, transparent 40%, rgba(7, 4, 15, 0.75)),
+    linear-gradient(180deg, rgba(7, 4, 15, 0.8), transparent 28%);
+}
+
+.t-cham__head {
+  position: absolute;
+  z-index: 3;
+  left: clamp(20px, 4vw, 56px);
+  top: calc(clamp(74px, 11vh, 120px) + env(safe-area-inset-top));
+  max-width: min(46ch, 52vw);
+  pointer-events: none;
+}
+.t-cham__eyebrow {
+  display: inline-flex;
+  font-family: var(--w-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--w-orange);
+}
+.t-cham__name {
+  margin: 14px 0 0;
+  font-size: clamp(1.9rem, 4vw, 3.1rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.032em;
+  text-shadow: 0 2px 26px rgba(7, 4, 15, 0.95);
+}
+.t-cham__claim {
+  margin: 16px 0 0;
+  font-size: clamp(1rem, 1.25vw, 1.12rem);
+  line-height: 1.55;
+  color: rgba(246, 243, 255, 0.92);
+  text-shadow: 0 1px 3px rgba(7, 4, 15, 0.95), 0 0 26px rgba(7, 4, 15, 0.9);
+}
+
+.t-cham__close {
+  position: absolute;
+  z-index: 5;
+  right: clamp(18px, 3vw, 40px);
+  top: calc(clamp(18px, 2.4vw, 30px) + env(safe-area-inset-top));
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  appearance: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--w-ink);
+  padding: 10px 18px 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(217, 194, 255, 0.26);
+  background: rgba(12, 6, 26, 0.66);
+  backdrop-filter: blur(14px);
+  transition: border-color 0.3s, background 0.3s;
+}
+.t-cham__close:hover {
+  border-color: rgba(217, 194, 255, 0.6);
+  background: rgba(30, 16, 58, 0.75);
+}
+/* Bei offenem Text rückt der Ausgang nach links — sonst liegt er darunter. */
+.t-cham.has-panel .t-cham__close {
+  right: calc(min(430px, 42vw) + clamp(18px, 3vw, 40px));
+  transition: right 0.6s cubic-bezier(0.16, 0.84, 0.28, 1), border-color 0.3s, background 0.3s;
+}
+.t-cham__closeIcon {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+.t-cham__closeIcon i {
+  position: absolute;
+  left: 3px;
+  top: 9.5px;
+  width: 14px;
+  height: 1px;
+  background: currentColor;
+}
+.t-cham__closeIcon i:first-child { transform: rotate(45deg); }
+.t-cham__closeIcon i:last-child { transform: rotate(-45deg); }
+
+.t-cham__hint {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: calc(26px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--w-ink-soft);
+  pointer-events: none;
+}
+
+/* ---------- Klickpunkte ---------- */
+.t-spot {
+  position: absolute;
+  z-index: 4;
+  transform: translate(-50%, -50%);
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 16px;
+  cursor: pointer;
+  color: var(--w-ink);
+}
+.t-spot__dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--w-violet-bright);
+  box-shadow: 0 0 16px var(--w-violet);
+}
+.t-spot__ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border-radius: 50%;
+  border: 1px solid rgba(217, 194, 255, 0.55);
+  animation: tRing 2.8s ease-out infinite;
+}
+@keyframes tRing {
+  0% { transform: scale(0.5); opacity: 0; }
+  35% { opacity: 0.9; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+.t-spot__label {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 22px);
+  transform: translateX(-50%) translateY(-4px);
+  white-space: nowrap;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(12, 6, 26, 0.8);
+  border: 1px solid rgba(217, 194, 255, 0.22);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.t-spot:hover .t-spot__label,
+.t-spot.is-open .t-spot__label {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.t-spot.is-open .t-spot__dot {
+  background: var(--w-orange);
+  box-shadow: 0 0 22px var(--w-orange);
+}
+.t-spot.is-open .t-spot__ring {
+  animation: none;
+  border-color: rgba(255, 154, 77, 0.7);
+  transform: scale(1.1);
+}
+
+/* Das Filament vom Punkt zum Text */
+.t-thread {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--w-orange), rgba(217, 194, 255, 0.35), transparent);
+  transform-origin: left;
+  animation: tThread 0.6s cubic-bezier(0.16, 0.84, 0.28, 1);
+}
+@keyframes tThread {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ---------- Textpanel ---------- */
+.t-panel {
+  position: absolute;
+  z-index: 6;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: min(430px, 42vw);
+  padding: clamp(90px, 14vh, 150px) clamp(24px, 2.6vw, 40px) 40px;
+  background: linear-gradient(180deg, rgba(20, 11, 42, 0.94), rgba(8, 4, 18, 0.96));
+  backdrop-filter: blur(24px) saturate(1.3);
+  border-left: 1px solid rgba(217, 194, 255, 0.16);
+  transform: translateX(102%);
+  opacity: 0;
+  transition:
+    transform 0.6s cubic-bezier(0.16, 0.84, 0.28, 1),
+    opacity 0.4s ease;
+  overflow-y: auto;
+}
+.t-panel.is-open {
+  transform: none;
+  opacity: 1;
+}
+.t-panel__label {
+  display: inline-flex;
+  font-family: var(--w-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--w-orange);
+}
+.t-panel__title {
+  margin: 16px 0 0;
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+}
+.t-panel__body {
+  margin: 18px 0 0;
+  font-size: 1rem;
+  line-height: 1.66;
+  color: var(--w-ink-soft);
+}
+.t-panel__close {
+  margin-top: 28px;
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--w-violet-bright);
+  border-bottom: 1px solid rgba(217, 194, 255, 0.4);
+}
+
+/* ---------- Schmale Fenster ---------- */
+@media (max-width: 860px) {
+  .t-map {
+    left: 10px;
+    height: 44vh;
+  }
+  .t-map__label {
+    display: none;
+  }
+  .t-copylayer::before {
+    width: 100%;
+    height: 84%;
+    top: auto;
+    bottom: 0;
+    background: linear-gradient(
+      0deg,
+      rgba(7, 4, 15, 0.97) 0%,
+      rgba(7, 4, 15, 0.92) 36%,
+      rgba(7, 4, 15, 0.7) 64%,
+      transparent 100%
+    );
+  }
+  .t-copy {
+    left: 44px;
+    right: 18px;
+    top: auto;
+    bottom: calc(64px + env(safe-area-inset-bottom));
+    transform: none;
+    width: auto;
+  }
+  .t-hint {
+    display: none;
+  }
+  .t-cham__head {
+    max-width: none;
+    right: clamp(20px, 4vw, 56px);
+  }
+  /* Hochkant kommt der Text von unten statt von rechts — sonst bleibt vom
+     Bild nichts übrig, um das es geht. */
+  .t-panel {
+    top: auto;
+    left: 0;
+    width: auto;
+    max-height: 62vh;
+    padding: 28px clamp(20px, 5vw, 32px) calc(28px + env(safe-area-inset-bottom));
+    border-left: 0;
+    border-top: 1px solid rgba(217, 194, 255, 0.16);
+    transform: translateY(102%);
+  }
+  .t-thread {
+    display: none;
+  }
+}
+
+/* ---------- Bewegungsreduktion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .t-spot__ring,
+  .t-enter.is-ready .t-enter__node {
+    animation: none;
+  }
+  .t-cham__frame,
+  .t-panel,
+  .t-thread {
+    transition: none;
+    animation: none;
+  }
+}
