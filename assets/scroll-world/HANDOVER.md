@@ -1,6 +1,6 @@
 # scroll-world — Übergabestand
 
-Stand: 04.08.2026 · Previz-Phase, Akt 1 + 1.5 gerendert
+Stand: 04.08.2026 · **Previz abgeschlossen — alle 8 Legs fertig, 71,3 s**
 
 Die Unterhaltung selbst lässt sich nicht mitnehmen — dieses Dokument ersetzt sie.
 Es enthält alle Entscheidungen, die fertigen Prompts und den Pipeline-Ablauf.
@@ -57,7 +57,10 @@ Das bestehende React/TS/Vite-Repo bleibt; nur die Bildquelle wechselt.
 | 3 | Anhalten, 360°-Umfahrt, Netz flutet den ganzen Raum und verbindet die Menschen | 10 s ✅ gerendert |
 | 3.5 | Vorbeiflug, jemand wischt beiläufig nach ihr, sie weicht aus, landet auf Papierstapel | 8 s ✅ gerendert |
 | 4 | **Finale I** — sie klappt auf, gibt das Netz frei, das Bild füllt sich mit Licht | 10 s ✅ gerendert |
-| 5 | **Finale II** — Weißabgang, dann aus den Wolken über die vollständig vernetzte Stadt | 10 s ⬅ läuft |
+| 5 | **Finale II** — Weißabgang, dann aus den Wolken über die vollständig vernetzte Stadt | 10 s ✅ gerendert |
+
+**✅ PREVIZ-KETTE VOLLSTÄNDIG (04.08.2026).** Alle acht Legs gerendert und
+aneinandergesetzt: `previz/GESAMT-previz.mp4`, **71,3 s**, 480p, 16:9.
 
 **Struktur ab 04.08.2026 geändert.** Die ursprünglichen Akte 4 (Prozesse), 4.5
 (Lüftungsgitter) und 6 (Rückkehr zum blühenden Ast) sind **entfallen**. Der Film
@@ -212,7 +215,12 @@ Ablauf pro Leg:
 ## Kosten
 
 - 480p ≈ $0,067/s · 720p ≈ $0,151/s · 1080p ≈ $0,374/s
-- Ausgegeben bisher: **~$13,00** · Guthaben: **$13,42** (Stand 04.08.2026, nach Akt 2.5)
+- Ausgegeben bisher: **~$18,40** · Guthaben: **$8,05** (Stand 04.08.2026, Previz komplett)
+- **24 Renders, davon 13 verworfen.** Die komplette Previz-Kette hat rund $16
+  gekostet. Alle Ursachen der Fehlversuche stehen oben als Regeln — die nächste
+  Session sollte mit deutlich weniger Anläufen auskommen.
+- Ein 720p-Final der ganzen Kette (71 s) kostet ~$13 und passt **nicht** ins
+  Restguthaben.
 - Akt 2 brauchte 5 Anläufe, Akt 2.5 sechs. Die Ursachen stehen alle oben als Regeln.
   Ein bekannter Fallstrick: Die CLI kann beim Empfangen abstürzen („Unexpected token
   '<'"), obwohl der Lauf serverseitig fertig und **bezahlt** ist. Dann nicht neu
@@ -228,18 +236,24 @@ Ablauf pro Leg:
 
 ## Offen
 
-- [x] Akt 1.5 rendern (Baumabstieg) — `previz/akt15-480p.mp4`, Seed 12531
-- [x] Akt 2 rendern (Scan, Lichttor) — `previz/akt2-480p.mp4`, Seed 86882
-- [x] Akt 2.5 rendern (Durchflug, Haus erwacht) — `previz/akt25-480p.mp4`, Seed 64085
-- [ ] **Akt 3 (10 s) — Menschen vernetzen.** Startframe: `frames/akt25_last.jpg`,
-      warm erleuchteter Raum, Menschen in Bewegung, Netz auf Tischen und Boden
-      begonnen, Menschen untereinander noch **unverbunden**.
-      Offen und mit Norman zu klären: sollen **Personen-Symbole über den Köpfen**
-      erscheinen (aus seinem Referenzbild vom 03.08.)? Wäre ein neues grafisches
-      Element, das der Film bisher nicht hat.
-      Beachten: Orange dominiert am Ende von 2.5 (Sättigung 32) — mit dem violetten
-      Netz über den Menschen sollte sich das von selbst ausgleichen.
-- [ ] Akt 4, 4.5, 5, 6 (33 s)
+- [x] **Alle acht Previz-Legs gerendert** — Seeds: Akt 1 (aus 03.08.), 1.5 = 12531,
+      2 = 86882, 2.5 = 64085, 3 = 73757, 3.5 = 88988, 4 = 98128, 5 = 69342
+- [x] Gesamtfassung zusammengesetzt: `previz/GESAMT-previz.mp4`, 71,3 s
+
+### Was als Nächstes ansteht
+
+- [ ] **Nähte im Fluss prüfen.** Jeder Schlussframe wurde einzeln kontrolliert, die
+      Übergänge aber nie am Stück im Zusammenhang. Besonders anschauen: der
+      Weißabgang zwischen Akt 4 und 5 — er ist der einzige Übergang, der nicht
+      frame-identisch ist, sondern über die Helligkeit trägt.
+- [ ] **Entscheidung Final-Qualität.** 720p für die ganze Kette kostet ~$13, das
+      Guthaben liegt bei **$8,05**. Entweder nachladen oder bei 480p bleiben. Für
+      eine gescrubbte Scroll-Seite ist 480p vertretbar, auf großen Displays sichtbar.
+- [ ] **Engine einbauen:** `references/scrub-engine.js` aus dem scroll-world-Plugin,
+      Anbindung in `JourneyCanvas.tsx`
+- [ ] **Texte pro Akt neu schreiben** — seit „branchenneutral" und der geänderten
+      Aktstruktur passt die alte Copy nicht mehr. Blockiert nichts, weil HTML.
+- [ ] Impressum + Datenschutzerklärung (siehe README)
 - [ ] Texte pro Akt neu schreiben — seit „branchenneutral" und der Änderung von Akt 3 passt die alte Copy nicht mehr. Blockiert nichts, weil HTML.
 - [ ] Engine einbauen: `references/scrub-engine.js` aus dem scroll-world-Plugin, Anbindung in `JourneyCanvas.tsx`
 - [ ] Impressum + Datenschutzerklärung (siehe README)
