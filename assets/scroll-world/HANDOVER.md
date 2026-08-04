@@ -52,8 +52,8 @@ Das bestehende React/TS/Vite-Repo bleibt; nur die Bildquelle wechselt.
 |---|---|---|
 | 1 | Der Ast — Landung in der Kuhle, Netz aktiviert | 5 s ✅ **auf 5 s gekürzt** |
 | 1.5 | Abflug vom Ast, Abstieg am Stamm mit fortlaufender Digitalisierung, Rasen, Enthüllung des Bürogebäudes | 10 s ✅ gerendert |
-| 2 | Strukturen — Fassaden-Scan, Anflug aufs offene Fenster | 8 s ⬅ **als Nächstes** |
-| 2.5 | Durchflug durchs Fenster, kurze Dunkelheit | 5 s |
+| 2 | Strukturen — Fassaden-Scan, Etagen erwachen von innen, Kippfenster | 8 s ✅ gerendert |
+| 2.5 | Durchflug durchs **Kippfenster**, kurze Dunkelheit | 5 s ⬅ **als Nächstes** |
 | 3 | Menschen — Flug durchs Großraumbüro, Verbindungen zwischen Personen | 10 s |
 | 4 | Prozesse — Landung auf Dokument, Prozessnetz über dem Tisch, kein Pull-back | 10 s |
 | 4.5 | Ausflug durchs Lüftungsgitter, Dunkelheit, Durchbruch über die Stadt | 5 s |
@@ -66,9 +66,35 @@ Das bestehende React/TS/Vite-Repo bleibt; nur die Bildquelle wechselt.
 > Stylised painterly 3D illustration with the graphic language of a hand-painted game world - bold silhouettes, simplified sculpted forms, soft painterly surfaces without fine photoreal texture detail, and strong contrast between deep shadow and glowing accent light. Never photorealistic and never live-action, but equally never comic or cartoon. Deep violet and midnight-blue base throughout, structures and light in royal and electric violet. Warm orange reserved for sunset light, backlight, rim light, highlights and the blossoms - present but never dominant. This violet-and-orange palette is present in every single frame including the very last one; the image never desaturates into grey, neutral blue or realistic daylight colour. Soft bloom, volumetric haze, shallow depth of field, subtle film grain, calm slightly surreal atmosphere. Organic surfaces meet digital light structures. No neon cyberpunk city, no text, no letters, no logos, no signage.
 
 Referenz für die Bildsprache: **Hollow Knight, aber in 3D**. Formen lesen sich als
-Silhouette, nicht als Textur. Der alte Block sagte nur „deliberately not
-photorealistic" — eine Verneinung, die das Modell überfährt. Jetzt steht positiv
-da, wie die Oberfläche aussehen *soll*.
+Silhouette, nicht als Textur.
+
+**Positiv formulieren, nie verneinen.** Das ist die wichtigste Lehre der Session:
+„not photorealistic" blieb wirkungslos, „simplified sculpted forms, soft painterly
+surfaces" wirkte sofort. Dasselbe beim Flügelschlag — „never static" brachte nichts,
+„beating in fast soft-blurred strokes" brachte den Schlag. Wenn ein Merkmal nicht
+kommt: beschreiben, wie es aussehen *soll*, statt zu verbieten, was nicht sein darf.
+
+**INNENRÄUME GEDÄMPFT** (ab Akt 2.5, ergänzend zum STIL-Block)
+> Interiors stay dim and moody: large parts of the frame remain in deep violet
+> shadow, artificial light reads as small warm pools and glowing edges rather than
+> broad even illumination, and the image never becomes a brightly lit realistic
+> architectural render.
+
+Grund: Die mittlere Helligkeit stieg von Akt 1.5 (41) über Akt 2 v1 (65) auf Akt 2 v2
+(88), weil beleuchtete Büroetagen ins Bild kamen. Flächige Helligkeit tötet den
+Schatten-Licht-Kontrast, der den Stil trägt — das Bild rutscht dann zurück ins
+Fotorealistische. Akt 3 spielt komplett im Büro und ist hier besonders gefährdet.
+
+**SONNENSTAND**
+> Nie absolut festlegen, sondern **aus dem tatsächlichen Startframe ableiten** und
+> im Prompt ausdrücklich beschreiben („low on the horizon to the right, behind the
+> building; never moves or jumps sides"). Dazu immer die Schattenseite nennen,
+> sonst leuchtet Seedance beide Seiten gleich und das Bild wirkt flach.
+
+**SCHWEIF**
+> Der Leuchtschweif ist **durchgehend** sichtbar, solange sie fliegt — auch in
+> freier Luft ohne Oberfläche in der Nähe. Ohne diesen Satz zündet er nur nahe an
+> Objekten und sie wirkt zwischendurch „ausgeschaltet".
 
 **WIRKMECHANIK** (in jedem Prompt sinngemäß, 04.08.2026 präzisiert)
 > Blüten, Gras und Pflanzen sind **von Anfang an da**. Sie werden nie erschaffen,
@@ -144,10 +170,13 @@ Ablauf pro Leg:
 
 ## Offen
 
-- [x] Akt 1.5 rendern (Baumabstieg) — `previz/akt15-480p.mp4`, Seed 90208, Run `01KZ5ZKQ...`
-- [ ] Akt 2 rendern (Fassaden-Scan, Anflug aufs Fenster), dann 2.5
-      Startframe liegt bereit: `frames/akt15_last.jpg` — Libelle von hinten,
-      futuristisches Bürogebäude groß und nah voraus, Fassade noch unvernetzt.
+- [x] Akt 1.5 rendern (Baumabstieg) — `previz/akt15-480p.mp4`, Seed 12531
+- [x] Akt 2 rendern (Fassaden-Scan) — `previz/akt2-480p.mp4`, Seed 13033
+- [ ] Akt 2.5 rendern (Durchflug durchs Kippfenster, 5 s)
+      Startframe liegt bereit: `frames/akt2_last.jpg` — Libelle vor dem gekippten
+      Fenster, Fassade vernetzt, Etagen erwacht, eine Person drinnen erkennbar.
+      **Achtung:** Innenraum-Regel anwenden, sonst wird es zu hell.
+- [ ] Akt 3 (Großraumbüro) — hier ist die Aufhellungsgefahr am größten
 - [ ] Texte pro Akt neu schreiben — seit „branchenneutral" und der Änderung von Akt 3 passt die alte Copy nicht mehr. Blockiert nichts, weil HTML.
 - [ ] Engine einbauen: `references/scrub-engine.js` aus dem scroll-world-Plugin, Anbindung in `JourneyCanvas.tsx`
 - [ ] Impressum + Datenschutzerklärung (siehe README)
