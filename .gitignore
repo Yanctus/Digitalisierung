@@ -1,0 +1,31 @@
+# Abhängigkeiten — plattformabhängig, 104 MB, wird mit `npm install` neu erzeugt
+node_modules/
+
+# Build-Ausgabe
+dist/
+*.local
+
+# Claude Code: maschinenlokale Einstellungen (launch.json wird geteilt)
+.claude/settings.local.json
+
+# Umgebungsvariablen und Schlüssel
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+
+# Betriebssystem
+.DS_Store
+Thumbs.db
+desktop.ini
