@@ -1,6 +1,6 @@
 # scroll-world — Übergabestand
 
-Stand: 04.08.2026 · **Previz abgeschlossen — alle 8 Legs fertig, 71,3 s**
+Stand: 04.08.2026 · **Previz fertig (8 Legs, 71,3 s) · Website gebaut und lauffähig**
 
 Die Unterhaltung selbst lässt sich nicht mitnehmen — dieses Dokument ersetzt sie.
 Es enthält alle Entscheidungen, die fertigen Prompts und den Pipeline-Ablauf.
@@ -240,6 +240,66 @@ Ablauf pro Leg:
       2 = 86882, 2.5 = 64085, 3 = 73757, 3.5 = 88988, 4 = 98128, 5 = 69342
 - [x] Gesamtfassung zusammengesetzt: `previz/GESAMT-previz.mp4`, 71,3 s
 
+---
+
+## Die Website (gebaut 04.08.2026)
+
+Der Film **ist** die Seite: Scrollen treibt die Zeit, die Kamera fliegt wirklich.
+Der frühere Canvas-Ansatz (`src/scene/`, `src/sections/`) ist abgelöst — die
+Dateien liegen noch da, werden aber nicht mehr eingebunden.
+
+| Datei | Aufgabe |
+|---|---|
+| `src/world/engine.ts` | Scrub-Engine, auf Architektur A zugeschnitten (keine Connectors) |
+| `src/world/ScrollWorld.tsx` | Setzt alles zusammen, hält den Zustand |
+| `src/world/worldConfig.ts` | Die acht Akte: Scrollweg, Linger, Copy |
+| `src/world/NetworkRail.tsx` | Navigation als wachsendes Netz |
+| `src/world/IgnitionText.tsx` | Zündende Typografie |
+| `src/world/TrailCursor.tsx` | Schweif am Mauszeiger |
+| `src/world/world.css` | Palette und Layout |
+| `public/world/vid/leg0–7.mp4` | Clips, fürs Scrubbing enkodiert (crf 20, `-g 8`, faststart, `-an`) |
+| `public/world/still/leg0–7.jpg` | Poster, jeweils Frame 0 des Legs |
+
+**Vier Techniken aus dem Skill, die nicht "vereinfacht" werden dürfen** — jede
+davon behebt einen konkreten Ausfall (stehen als Kommentar in `engine.ts`):
+Blob-Laden statt HTTP-Byte-Ranges, kein Seek während der Decoder noch arbeitet,
+Standbild bleibt bis der Clip wirklich malt, iOS-Priming beim ersten Touch.
+
+**Drei Gestaltungsideen**, die aus dem Film abgeleitet sind: die Navigation
+wächst zum Netz, Überschriften werden buchstabenweise entzündet statt
+eingeblendet (dieselbe Regel wie im Film — nichts entsteht, Licht legt sich nur
+darüber), der Mauszeiger zieht den Schweif der Libelle.
+
+### Fallstricke beim Bau (alle real aufgetreten)
+
+- `Math.max/min` reichen **NaN durch** → `clamp` muss NaN-fest sein, sonst
+  landen `NaN` in CSS-Werten.
+- Zerlegt man Text in `inline-block`-Spans, **verschwinden die Wortabstände**.
+  Ein CSS-`margin` repariert nur die Optik — `textContent` und damit Kopieren,
+  Suchen und Screenreader bleiben kaputt. Es braucht **echte Leerzeichen im DOM**.
+- Das globale `scroll-behavior: smooth` aus `src/index.css` **kollidiert mit dem
+  Scrubbing**. `world.css` setzt es auf `auto` zurück; weiches Scrollen macht die
+  Engine gezielt bei den Rail-Sprüngen.
+- Der Browser stellt beim Neuladen die Scrollposition wieder her → man landet
+  mitten im Film. Die Engine setzt `history.scrollRestoration = 'manual'`.
+- Der erste Akt muss **beim Laden von selbst zünden**, sonst steht die
+  Hauptüberschrift auf der Startansicht gedämpft da.
+- Die Clips sind stellenweise sehr hell (Lichttor, Flutung) → Abdunkelungsverlauf
+  und Textschatten mussten deutlich kräftiger als üblich ausfallen, hochkant noch
+  stärker als am Desktop.
+
+### Offen an der Website
+
+- [ ] **Video liegt in 480p** (24 MB gesamt). Auf großen Displays sichtbar.
+      720p-Final der Kette ≈ $13, Guthaben $8,05 — reicht nicht.
+- [ ] **Keine nativen Mobilclips.** Die Skill sieht dafür eine zweite, hochkant
+      gerenderte 9:16-Kette vor (`clipMobile`). Aktuell wird der Querformat-Clip
+      mittig beschnitten — funktioniert, weil die Libelle zentral bleibt, ist
+      aber nicht dasselbe. Verdoppelt die Videokosten.
+- [ ] **CTA-Ziele zeigen ins Leere** (`#kontakt`, `#vorgehen`) — es gibt noch
+      keine Unterseiten oder Abschnitte dafür.
+- [ ] Impressum + Datenschutzerklärung.
+
 ### Was als Nächstes ansteht
 
 - [ ] **Nähte im Fluss prüfen.** Jeder Schlussframe wurde einzeln kontrolliert, die
@@ -249,10 +309,11 @@ Ablauf pro Leg:
 - [ ] **Entscheidung Final-Qualität.** 720p für die ganze Kette kostet ~$13, das
       Guthaben liegt bei **$8,05**. Entweder nachladen oder bei 480p bleiben. Für
       eine gescrubbte Scroll-Seite ist 480p vertretbar, auf großen Displays sichtbar.
-- [ ] **Engine einbauen:** `references/scrub-engine.js` aus dem scroll-world-Plugin,
-      Anbindung in `JourneyCanvas.tsx`
-- [ ] **Texte pro Akt neu schreiben** — seit „branchenneutral" und der geänderten
-      Aktstruktur passt die alte Copy nicht mehr. Blockiert nichts, weil HTML.
+- [x] **Engine einbauen** — erledigt, siehe Abschnitt „Die Website". Nicht die
+      Skill-Datei kopiert, sondern deren Techniken in `src/world/engine.ts`
+      portiert: die Skill-Engine hat keine API (kein Rückgabewert, keine
+      Callbacks), die Gestaltungsideen brauchen aber Zugriff auf den Fortschritt.
+- [x] **Texte pro Akt neu geschrieben** — acht Akte, in `src/world/worldConfig.ts`
 - [ ] Impressum + Datenschutzerklärung (siehe README)
 - [ ] Texte pro Akt neu schreiben — seit „branchenneutral" und der Änderung von Akt 3 passt die alte Copy nicht mehr. Blockiert nichts, weil HTML.
 - [ ] Engine einbauen: `references/scrub-engine.js` aus dem scroll-world-Plugin, Anbindung in `JourneyCanvas.tsx`
