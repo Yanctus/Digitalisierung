@@ -54,11 +54,18 @@ Das bestehende React/TS/Vite-Repo bleibt; nur die Bildquelle wechselt.
 | 1.5 | Abflug vom Ast, Abstieg am Stamm mit fortlaufender Digitalisierung, Rasen, Enthüllung des Bürogebäudes | 10 s ✅ gerendert |
 | 2 | Scan aus der Distanz, Wiese vernetzen, Fassadennetz — Gebäude bleibt **dunkel** — Glas wird zu Licht und öffnet ein Tor | 10 s ✅ gerendert |
 | 2.5 | Durch das Lichttor, kurz dunkel, dann **erwacht das Haus** (Lichtwelle), Menschen in Bewegung, Netz beginnt | 8 s ✅ gerendert |
-| 3 | Menschen — Flug durchs Großraumbüro, Verbindungen zwischen Personen | 10 s |
-| 4 | Prozesse — Landung auf Dokument, Prozessnetz über dem Tisch, kein Pull-back | 10 s |
-| 4.5 | Ausflug durchs Lüftungsgitter, Dunkelheit, Durchbruch über die Stadt | 5 s |
-| 5 | Netzwerk — Flug über die Stadt, Netz breitet sich selbst aus | 8 s |
-| 6 | Horizont — Crane-up, Libelle setzt sich auf blühenden Ast. Pull-back hier erlaubt. | 10 s |
+| 3 | Anhalten, 360°-Umfahrt, Netz flutet den ganzen Raum und verbindet die Menschen | 10 s ✅ gerendert |
+| 3.5 | Vorbeiflug, jemand wischt beiläufig nach ihr, sie weicht aus, landet auf Papierstapel | 8 s ✅ gerendert |
+| 4 | **Finale I** — sie klappt auf, gibt das Netz frei, das Bild füllt sich mit Licht | 10 s ✅ gerendert |
+| 5 | **Finale II** — Weißabgang, dann aus den Wolken über die vollständig vernetzte Stadt | 10 s ⬅ läuft |
+
+**Struktur ab 04.08.2026 geändert.** Die ursprünglichen Akte 4 (Prozesse), 4.5
+(Lüftungsgitter) und 6 (Rückkehr zum blühenden Ast) sind **entfallen**. Der Film
+endet jetzt mit dem Aufklappen der Libelle und dem Flug über die vernetzte Stadt.
+Die Klammer schließt sich damit nicht am selben Ast, sondern im Maßstab: von
+**einem** Ast zur **ganzen** Region.
+
+Gesamtlänge: 5 + 10 + 10 + 8 + 10 + 8 + 10 + 10 = **71 s**
 
 ## Prompt-Bausteine (in JEDEM Prompt wortgleich)
 
@@ -114,6 +121,16 @@ die **Form**, nicht an die Dunkelheit — im STIL-Block steht dafür jetzt
 > schmaler war als ihre Spannweite. Erst der Vergleich mit einem sichtbaren Objekt
 > wirkte: „far wider and taller than her wingspan, several times as wide as the
 > dragonfly, with a generous margin on both sides of her wings."
+
+**KEINE VOLLE 360°-UMFAHRT — Modell hat kein Raumgedächtnis**
+> Drei Versuche ($2,12) scheiterten: der Raum schrumpfte, der Eingang verschwand,
+> die Libelle geriet hinter eine Person. Seedance hält **keine 3D-Geometrie** vor
+> und erfindet jede Blickrichtung neu, die der Startframe nicht zeigt.
+> Was half: eine auffällige **Landmarke** benennen, die sichtbar bleiben muss
+> („the wide glowing violet doorway stays clearly visible in the far end wall").
+> Was nicht half: „the background is thrown out of focus" — die Bokeh-Anweisung
+> wurde ignoriert. Für künftige Legs: höchstens halbe Umfahrt, auf Raumseiten,
+> die der Startframe zeigt.
 
 **RICHTUNGEN ALS BILD BESCHREIBEN, NICHT ALS RICHTUNG**
 > „the window swings open inwards" ergab zweimal ein nach außen aufschlagendes
