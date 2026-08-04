@@ -40,6 +40,29 @@ export default function TreeWorld() {
    */
   const returnY = useRef(0)
 
+  // Der Browser stellt beim Neuladen die alte Position wieder her — man landet
+  // dann mitten im Baum, ohne zu wissen wo. Die Welt fängt unten an.
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
+  /**
+   * Direkteinstieg über `#baum/<id>`. Für den Prototyp der wichtigste Weg:
+   * Eine Kammer muss sich verschicken und ohne Suchen öffnen lassen.
+   */
+  useEffect(() => {
+    const fromHash = () => {
+      const id = window.location.hash.split('/')[1]
+      if (id && CHAMBERS.some((c) => c.id === id)) {
+        setOpenChamber(id)
+        setVisited((v) => (v.includes(id) ? v : [...v, id]))
+      }
+    }
+    fromHash()
+    window.addEventListener('hashchange', fromHash)
+    return () => window.removeEventListener('hashchange', fromHash)
+  }, [])
+
   useEffect(() => {
     if (!stageRef.current || !trackRef.current) return
     const api = mountWorld(
@@ -163,12 +186,29 @@ export default function TreeWorld() {
         })}
       </div>
 
-      <div
-        className="t-hint"
-        style={{ opacity: Math.max(0, 1 - st.progress * 12) }}
-        aria-hidden="true"
-      >
-        scrollen, um zu steigen · klicken, um einzutreten
+      {/* Die vier Kammern, sichtbar statt versteckt.
+          Im Prototyp der wichtigste Teil der Oberfläche: Man muss sehen
+          können, dass es Räume gibt, wie sie aussehen und wie man hineinkommt
+          — ohne den richtigen Punkt am Stamm zu treffen. Später ist das die
+          Karte für den zweiten Besuch. */}
+      <div className="t-dock">
+        <span className="t-dock__lead">
+          Scrollen steigt den Stamm hoch · Klicken führt in eine Kammer
+        </span>
+        <div className="t-dock__items">
+          {CHAMBERS.map((s, i) => (
+            <button
+              key={s.id}
+              type="button"
+              className={'t-dock__item' + (visited.includes(s.id) ? ' is-visited' : '')}
+              onClick={() => enter(s.id)}
+            >
+              <img src={s.chamber!.poster} alt="" loading="lazy" />
+              <span className="t-dock__num">{String(i + 1).padStart(2, '0')}</span>
+              <span className="t-dock__name">{s.name}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {openStation && <Chamber station={openStation} onClose={leave} />}

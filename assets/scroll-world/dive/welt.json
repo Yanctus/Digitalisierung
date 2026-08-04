@@ -1,0 +1,13 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Stylised painterly 3D illustration with the graphic language of a hand-painted game world - bold silhouettes, simplified sculpted forms, soft painterly surfaces without fine photoreal texture detail, and strong contrast between deep shadow and glowing accent light. Deep violet and midnight-blue water throughout, structures and living light in royal and electric violet. Warm orange reserved for lantern light, backlight, rim light and highlights - present but never dominant. Underwater world: slowly drifting particles, soft god rays falling from far above, volumetric haze, soft bloom, shallow depth of field, subtle film grain, calm slightly surreal atmosphere. Organic grown surfaces meet digital light structures. No text, no letters, no logos, no signage. SCENE: An entire miniature underwater world on one floating reef island, seen from outside at a high isometric three-quarter angle, tilt-shift miniature look, surrounded by deep dark open water. Several distinct places are visible on the island at once: a tall kelp forest on the left, a domed coral hall in the middle, a sunken wooden wreck on the right, and a glowing vent below. The island itself is completely still; only kelp sways and particles drift. CAMERA: the camera is locked on a tripod for the entire shot - no pan, no tilt, no dolly, no zoom, no orbit, no handheld drift. The framing of the last frame is identical to the framing of the first frame. Only the contents of the scene move, and because everything is underwater it drifts, sways and floats without any clear direction of travel."
+    }
+  ],
+  "resolution": "480p",
+  "ratio": "16:9",
+  "duration": 10,
+  "generate_audio": false,
+  "watermark": false
+}

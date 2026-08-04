@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import ScrollWorld from './world/ScrollWorld'
 import TreeWorld from './tree/TreeWorld'
+import DiveWorld from './dive/DiveWorld'
 import './world/world.css'
 import './world/portfolio.css'
 import './tree/tree.css'
+import './dive/dive.css'
 
 /**
  * Zwei Welten, eine Seite.
@@ -30,5 +32,7 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
 
-  return hash === '#baum' ? <TreeWorld /> : <ScrollWorld />
+  if (hash.startsWith('#baum')) return <TreeWorld />
+  if (hash.startsWith('#tauchen')) return <DiveWorld />
+  return <ScrollWorld />
 }

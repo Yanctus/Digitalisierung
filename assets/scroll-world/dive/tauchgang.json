@@ -1,0 +1,27 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Stylised painterly 3D illustration with the graphic language of a hand-painted game world - bold silhouettes, simplified sculpted forms, soft painterly surfaces without fine photoreal texture detail, and strong contrast between deep shadow and glowing accent light. Deep violet and midnight-blue water throughout, structures and living light in royal and electric violet. Warm orange reserved for lantern light, backlight, rim light and highlights - present but never dominant. Underwater world: drifting particles, soft god rays falling from far above, volumetric haze, soft bloom, subtle film grain. No text, no letters, no logos, no signage. A single continuous fast camera move, no cuts. The camera starts far outside the floating reef island, then rushes forward and plunges down towards the glowing domed coral hall in the middle of the island, accelerating hard, with particles and bubbles streaking past the lens and motion blur at the edges of the frame. It passes through the opening of the dome and decelerates smoothly inside, coming to rest looking straight down the coral hall at the warm orange lantern on the floor. The move is fast and exhilarating in the middle and completely still at the end."
+    },
+    {
+      "type": "image_url",
+      "image_url": {
+        "url": "https://sfs.monid.ai/Yxa-mY_04E2FCbICPvX4DaDAdGMpEB2VZGDjh2zAVYVIn7wWbNqvyTt9aWJAGkOntoKJZXgfDivFhkHoxT79B_3bbUnGM6kQ_BVw-BqT2TUPC3rsnJrg2BqIfw_O_seBLnVhhyeodEoHClRoM-MM4EO4wOGlBJKRkCQYl9tdSgPjj33ea43Rz8DSSGfWBIIxzD8?e=1785880662"
+      },
+      "role": "first_frame"
+    },
+    {
+      "type": "image_url",
+      "image_url": {
+        "url": "https://sfs.monid.ai/g0DGqU_Uq89vmrMSDAQQlF7aOTdkXWXN3WmQGqNvaHFnBXqYWjN04UZ64KRaI-y1KtxfHwISX-ztaicylYGqwI5KEr8Q5rdec8uWoHZh9eLA1mYz9AHrdLzClQg527K2oN0MrIQyLdNXX6x4BI20Aiwe2H0tApsv5BptOKL8wvyecBub9zecGz134IxiqPWw?e=1785880664"
+      },
+      "role": "last_frame"
+    }
+  ],
+  "resolution": "480p",
+  "ratio": "16:9",
+  "duration": 5,
+  "generate_audio": false,
+  "watermark": false
+}
