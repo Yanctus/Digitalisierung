@@ -1,27 +1,8 @@
 /**
  * Die Unterwasserwelt — isometrische Nabe mit Tauchgängen.
  *
- * ============================================================================
- *  PROTOTYP. Ein Ort ist echt (die Kuppelhalle), die anderen drei sind als
- *  Punkte angelegt, aber noch ohne Clip — sie zeigen, wie die Welt aussieht,
- *  wenn sie fertig ist, und kosten nichts.
- * ============================================================================
- *
- * Warum diese Form:
- *
- *  - **Nichts ist versteckt.** Die ganze Welt liegt von der ersten Sekunde an
- *    sichtbar da. Man sieht alle Orte auf einmal und klickt den an, der einen
- *    interessiert. Genau das hat dem Baum gefehlt: Dort war die Nabe ein
- *    Tunnel, durch den man scrollte, und die Räume lagen dahinter im Dunkeln.
- *  - **Das Tempo liegt im Tauchgang.** Die Welt ruht, der Raum ruht — dazwischen
- *    liegt eine schnelle Kamerafahrt mit Bewegungsunschärfe. Der Kontrast macht
- *    die Geschwindigkeit erst spürbar.
- *  - **Unter Wasser gibt es keine Schwerkraftrichtung.** Alles schwebt und
- *    treibt. Genau die Bewegung, bei der eine Schleife nicht auffällt — anders
- *    als fallendes Papier oder Regen, die rückwärts sofort unsinnig aussehen.
- *
- * Die Schleifen sind **Kreuzblenden**, nicht Ping-Pong: Der Schwanz wird auf
- * den Kopf geblendet, dadurch behält jede Bewegung ihre Richtung.
+ * Ein Ort ist vollständig gerendert. Die übrigen Punkte zeigen bereits die
+ * spätere Geografie, bleiben aber bis zu ihren eigenen Clips deaktiviert.
  */
 
 export type DiveHotspot = {
@@ -31,6 +12,17 @@ export type DiveHotspot = {
   label: string
   title: string
   body: string
+}
+
+export type DivePageContent = {
+  eyebrow: string
+  title: string
+  intro: string
+  signals: { value: string; label: string; body: string }[]
+  principles: { label: string; title: string; body: string }[]
+  steps: { title: string; body: string; result: string }[]
+  metrics: { value: string; unit: string; label: string }[]
+  closing: { eyebrow: string; title: string; body: string }
 }
 
 export type Place = {
@@ -47,8 +39,8 @@ export type Place = {
   room?: string
   poster?: string
   hotspots?: DiveHotspot[]
-  /** Der Text, der unter der Schleife liegt, wenn man im Raum weiterscrollt. */
-  page?: { lead: string; blocks: { title: string; body: string }[] }
+  /** Die redaktionelle Tiefenreise unterhalb des lebenden Raum-Heros. */
+  page?: DivePageContent
 }
 
 export const WORLD = {
@@ -97,26 +89,78 @@ export const PLACES: Place[] = [
       },
     ],
     page: {
-      lead: 'Die häufigste Fehlannahme in gewachsenen Betrieben ist, dass ein Ablauf gut sein muss, weil er seit Jahren läuft. Läuft heißt nur: Es ist noch niemandem zu teuer geworden.',
-      blocks: [
+      eyebrow: 'Prozess-Tomografie / 01',
+      title: 'Nicht digitalisieren. Erst durchleuchten.',
+      intro:
+        'Die häufigste Fehlannahme in gewachsenen Betrieben: Ein Ablauf muss gut sein, weil er seit Jahren läuft. Läuft heißt nur, dass seine unsichtbaren Kosten noch niemand gemeinsam gesehen hat.',
+      signals: [
         {
-          title: 'Woran man einen Ablauf erkennt, der nur noch läuft',
-          body: 'Es gibt eine Person, ohne die er stehenbleibt. Es gibt mindestens einen Schritt, den niemand erklären kann. Und es gibt eine Liste, die jemand täglich pflegt, damit ein System mit einem anderen übereinstimmt. Jedes dieser drei Zeichen kostet Geld, das in keiner Auswertung auftaucht.',
+          value: '1 Kopf',
+          label: 'Abhängigkeit',
+          body: 'Der Ablauf steht, sobald eine bestimmte Person fehlt. Wissen ist vorhanden — aber nicht im System.',
         },
         {
-          title: 'Was zuerst passiert',
-          body: 'Sechs bis acht Wochen mitlaufen und aufschreiben, was tatsächlich geschieht — nicht, was im Organigramm steht. Erst danach wird entschieden, und zwar gemeinsam. Vorher fällt keine Entscheidung über Software.',
+          value: '2×',
+          label: 'Reibung',
+          body: 'Dieselbe Information wird an mehreren Stellen gepflegt, damit getrennte Systeme dieselbe Wahrheit kennen.',
         },
         {
-          title: 'Was am Ende bleibt',
-          body: 'Ein Ablauf, den mehrere Menschen vollständig gehen können, dokumentiert von denen, die ihn gehen. Kein Handbuch, das niemand liest, sondern ein Weg, der auch dann funktioniert, wenn jemand ausfällt.',
+          value: '?',
+          label: 'Blindflug',
+          body: 'Niemand kann den ganzen Weg zeigen. Jeder kennt seinen Ausschnitt — die Kosten entstehen dazwischen.',
         },
       ],
+      principles: [
+        {
+          label: 'Die Laterne',
+          title: 'Sichtbarkeit vor Automatisierung.',
+          body: 'Oft entsteht der größte Hebel in dem Moment, in dem alle Beteiligten erstmals denselben Ablauf sehen.',
+        },
+        {
+          label: 'Die Säulen',
+          title: 'Erst verstehen, was die Last trägt.',
+          body: 'Gewachsene Schritte sind nicht zufällig. Wer ihren Grund nicht kennt, optimiert womöglich genau das Falsche.',
+        },
+        {
+          label: 'Das Licht',
+          title: 'Die Lösung muss innen leuchten.',
+          body: 'Ein Projekt ist erst fertig, wenn Methode, Wissen und Verantwortung im Unternehmen bleiben — ohne Berater daneben.',
+        },
+      ],
+      steps: [
+        {
+          title: 'Mitlaufen',
+          body: 'Wir beobachten, was wirklich geschieht — nicht, was im Organigramm stehen sollte.',
+          result: 'Der echte Weg',
+        },
+        {
+          title: 'Kartieren',
+          body: 'Menschen, Entscheidungen, Daten und Umwege werden zu einem gemeinsamen Bild verbunden.',
+          result: 'Eine Wahrheit',
+        },
+        {
+          title: 'Entlasten',
+          body: 'Wir lösen zuerst den Engpass mit dem größten Effekt und dem kleinsten Eingriff.',
+          result: 'Spürbare Wirkung',
+        },
+        {
+          title: 'Übergeben',
+          body: 'Der neue Weg wird von denen dokumentiert und getragen, die ihn jeden Tag gehen.',
+          result: 'Keine Abhängigkeit',
+        },
+      ],
+      metrics: [
+        { value: '6–8', unit: 'Wochen', label: 'bis das echte System sichtbar ist' },
+        { value: '0', unit: 'Tools', label: 'bevor der Prozess verstanden ist' },
+        { value: '100', unit: '% Übergabe', label: 'Wissen bleibt im Unternehmen' },
+      ],
+      closing: {
+        eyebrow: 'Zurück an die Oberfläche',
+        title: 'Wer das Ganze sieht, entscheidet anders.',
+        body: 'Der Tauchgang endet. Der Überblick bleibt. Kehren Sie ins Riff zurück — oder starten Sie mit Ihrem eigenen Prozess.',
+      },
     },
   },
-  // Noch nicht gerendert — die Punkte stehen, damit sichtbar ist, wie die
-  // fertige Welt aussieht. Je Ort fehlen ein Tauchgang (~$0,35) und ein
-  // Raum (~$0,71).
   {
     id: 'tangwald',
     x: 13,
