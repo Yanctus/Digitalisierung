@@ -175,7 +175,7 @@
       "freigabe": "Welt vorgeschlagen, Wrack offen"
     }
   ],
-  "_stand": "Weltmaster v9 vorgeschlagen und eingefroren. Wrack-Master steht noch aus (Bodenschienen). Videos nicht gestartet.",
+  "_stand": "Alle neu generierten Weltmaster verworfen. Es gilt die bereits gerenderte Welt (assets/scroll-world/dive/raw/welt.mp4). Naechste Schritte: die vier weiteren Orte entwerfen. Videos fuer neue Orte nicht gestartet.",
   "_ausgegeben_bisher_usd": 0.049,
   "_naechster_vorschlag": {
     "was": "nur 02-wrack-master neu, 1 Bild",
@@ -188,21 +188,21 @@
       "datei": "production/masters/v5-warm/",
       "kosten_usd": 0.0035,
       "pruefergebnis": "Farbe getroffen. Schlucht uebernahm das Bild, Text-Artefakt unten rechts (verletzt 'no text').",
-      "freigabe": "verworfen"
+      "freigabe": "VERWORFEN — Auftraggeber bleibt bei der bestehenden Welt (05.08.2026)"
     },
     {
       "id": "img-v6",
       "datei": "production/masters/v6-plateau/",
       "kosten_usd": 0.0035,
       "pruefergebnis": "Farbe wunderschoen, aber ueber Wasser: Horizont sichtbar, Schiff schwimmt oben.",
-      "freigabe": "verworfen"
+      "freigabe": "VERWORFEN — Auftraggeber bleibt bei der bestehenden Welt (05.08.2026)"
     },
     {
       "id": "img-v8",
       "datei": "production/masters/v8-tiefe/",
       "kosten_usd": 0.0035,
       "pruefergebnis": "DURCHBRUCH: eindeutig unter Wasser bei gleicher Waerme. Ursache des Auftauchens war das Wort 'sunset' — ein Sonnenuntergang ist per Definition ueber Wasser. Ersetzt durch 'the sun seen from far below through the surface'. Nur: die fuenf Orte nicht lesbar.",
-      "freigabe": "verworfen (Komposition)"
+      "freigabe": "VERWORFEN — Auftraggeber bleibt bei der bestehenden Welt (05.08.2026)"
     },
     {
       "id": "img-v9",
@@ -218,7 +218,7 @@
       "monid_job_id": "01KZ891C5WZPA0FG9KFKREF8Y3",
       "pruefergebnis": "Ganze Insel im Bild, Dreiviertelblick von oben. Tiefe, Waerme und Farbe von Referenzbild 2. Tangwald links, Kuppelhalle mit leuchtenden Fenstern Mitte, Schiffsmasten rechts dahinter, Spire oben, orange Blueten verstreut, violettes Licht faellt von der Unterseite. Schlucht und Observatorium nur angedeutet.",
       "besonderheit": "CLI stuerzte beim Empfangen ab ('Unexpected token <'), Lauf war serverseitig fertig und bezahlt. Ueber `monid runs get` geborgen statt neu gerendert.",
-      "freigabe": "als 00_WORLD_MASTER vorgeschlagen"
+      "freigabe": "VERWORFEN — Auftraggeber bleibt bei der bestehenden Welt (05.08.2026)"
     }
   ]
 }

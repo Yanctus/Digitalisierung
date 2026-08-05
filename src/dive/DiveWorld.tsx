@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { WORLD, PLACES, type Place } from './diveConfig'
+import RayLayer from './RayLayer'
 
-type Phase = 'world' | 'diving' | 'room' | 'rising'
+type Phase = 'world' | 'launch' | 'diving' | 'room' | 'rising'
 
 /**
  * Die Unterwasserwelt: sehen — hineintauchen — zurück.
@@ -51,20 +52,48 @@ export default function DiveWorld() {
   }, [phase])
 
   const failsafe = useRef(0)
+  const launchGuard = useRef(0)
+  const startDiveRef = useRef<(() => void) | null>(null)
+  /** Der laufende Ort, damit der Rochen-Rückruf ihn ohne Neubindung findet. */
+  const placeRef = useRef<Place | null>(null)
+  useEffect(() => {
+    placeRef.current = place
+  }, [place])
 
   /**
-   * Der Tauchgang wird erst gezeigt, wenn er wirklich läuft.
-   *
-   * Vorher wurde die Ebene sofort eingeblendet und das Video parallel
-   * gestartet — dann steht für einen Moment ein Standbild im Bild, das nicht
-   * zu dem passt, was die Weltschleife gerade zeigt, und es zuckt sichtbar.
-   * Jetzt: abspielen, auf `playing` warten, dann umschalten.
+   * Klick auf einen Ort: Erst fliegt der Rochen hin, dann fährt die Kamera
+   * hinterher. Er führt den Tauchgang an, statt daneben zu existieren.
    */
   const dive = useCallback((p: Place) => {
     if (!p.dive || !p.room) return
     setPlace(p)
     setOpenSpot(null)
     setVisited((v) => (v.includes(p.id) ? v : [...v, p.id]))
+    setPhase('launch')
+    /**
+     * Reißleine für den Anflug. Meldet der Rochen sein Ankommen nie — weil
+     * `requestAnimationFrame` im Hintergrund-Tab pausiert oder die Grafik
+     * hakt —, bliebe der Besucher für immer in der Welt stehen und der Klick
+     * hätte nichts bewirkt. Nach gut der doppelten Fluglänge geht es ohnehin
+     * weiter.
+     */
+    window.clearTimeout(launchGuard.current)
+    launchGuard.current = window.setTimeout(() => startDiveRef.current?.(), 2000)
+  }, [])
+
+  /**
+   * Der Rochen ist am Ort angekommen — jetzt übernimmt die Kamera.
+   *
+   * Der Tauchgang wird erst gezeigt, wenn er wirklich läuft: Vorher wurde die
+   * Ebene sofort eingeblendet und das Video parallel gestartet, dann stand für
+   * einen Moment ein Standbild im Bild, das nicht zur laufenden Weltschleife
+   * passte, und es zuckte sichtbar.
+   */
+  const startDive = useCallback(() => {
+    const p = placeRef.current
+    if (!p?.dive) return
+    // Ob der Rochen ankommt oder die Reißleine zieht — losfahren darf nur einer.
+    window.clearTimeout(launchGuard.current)
 
     const v = diveRef.current
     const start = () => {
@@ -96,7 +125,17 @@ export default function DiveWorld() {
     if (pr && pr.catch) pr.catch(() => setPhase('room'))
   }, [])
 
-  useEffect(() => () => window.clearTimeout(failsafe.current), [])
+  useEffect(() => {
+    startDiveRef.current = startDive
+  }, [startDive])
+
+  useEffect(
+    () => () => {
+      window.clearTimeout(failsafe.current)
+      window.clearTimeout(launchGuard.current)
+    },
+    [],
+  )
 
   /**
    * Auftauchen: derselbe Weg rückwärts.
@@ -200,6 +239,15 @@ export default function DiveWorld() {
               </span>
             </button>
           ))}
+
+          {/* Der Rochen liegt IM Bildrahmen, damit er dieselben Prozentwerte
+              benutzt wie die Orte — sonst zielt er daneben, sobald das Fenster
+              ein anderes Format hat als der Clip. */}
+          <RayLayer
+            mode={phase === 'launch' ? 'launch' : phase === 'world' ? 'idle' : 'hidden'}
+            target={phase === 'launch' && place ? { x: place.x, y: place.y } : null}
+            onArrived={startDive}
+          />
         </div>
         <div className="d-vignette" aria-hidden="true" />
 

@@ -20,9 +20,14 @@
   transition: opacity 0.7s cubic-bezier(0.16, 0.84, 0.28, 1);
 }
 .d-root.is-world .d-layer--world,
+.d-root.is-launch .d-layer--world,
 .d-root.is-room .d-layer--room {
   opacity: 1;
   pointer-events: auto;
+}
+/* Während der Rochen fliegt, gehört ihm das Bild: keine Klicks, keine Karten. */
+.d-root.is-launch .d-layer--world {
+  pointer-events: none;
 }
 /* Tauchgang und Auftauchen liegen über allem und sind der Schnitt selbst.
    Kurze Blende: Sie laufen schon, wenn sie erscheinen. */
@@ -65,6 +70,27 @@
     linear-gradient(180deg, rgba(5, 3, 13, 0.75), transparent 26%);
 }
 
+/* ---------- Der Rochen ---------- */
+.d-ray {
+  position: absolute;
+  z-index: 6;
+  width: 22%;
+  max-width: 340px;
+  pointer-events: none;
+  /* Ausgangszustand ohne Skript: an seinem Ruheplatz und unsichtbar. Läuft
+     `requestAnimationFrame` nicht (Tab im Hintergrund, Sparmodus), säße er
+     sonst unpositioniert und voll sichtbar in der oberen linken Ecke. */
+  left: 24%;
+  top: 26%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.34);
+  /* Kein Alphakanal nötig: das Bild liegt auf reinem Schwarz, und Screen
+     löscht Schwarz bei einem leuchtenden Wesen sauberer als jede Maske. */
+  mix-blend-mode: screen;
+  will-change: transform, opacity, left, top;
+  filter: drop-shadow(0 0 18px rgba(255, 154, 77, 0.45));
+}
+
 /* ---------- Die Orte ---------- */
 .d-place {
   position: absolute;
@@ -73,52 +99,89 @@
   appearance: none;
   background: none;
   border: 0;
-  padding: 18px;
+  padding: 22px;
   cursor: pointer;
   color: var(--w-ink);
+  transition: opacity 0.4s ease;
 }
 .d-place:disabled {
   cursor: default;
 }
+.d-root.is-launch .d-place {
+  opacity: 0;
+}
+
+/* Der Knoten selbst: deutlich größer als vorher, mit eigenem Herzschlag.
+   Vorher war er ein 11px-Punkt in einem detailreichen Bild — er ging darin
+   unter, und man musste ihn suchen statt ihn zu sehen. */
 .d-place__dot {
   display: block;
-  width: 11px;
-  height: 11px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: var(--w-violet-bright);
-  box-shadow: 0 0 18px var(--w-violet);
-  transition: background 0.35s, box-shadow 0.35s, transform 0.35s;
+  background: radial-gradient(circle at 50% 40%, #fff 0%, var(--w-violet-bright) 45%, var(--w-violet) 100%);
+  box-shadow: 0 0 24px 6px rgba(169, 112, 255, 0.85), 0 0 60px 12px rgba(169, 112, 255, 0.35);
+  animation: dBeat 2.2s ease-in-out infinite;
+  transition: background 0.35s, box-shadow 0.35s;
 }
-.d-place__ring {
+@keyframes dBeat {
+  0%, 100% { transform: scale(1); }
+  38% { transform: scale(1.28); }
+  55% { transform: scale(1.1); }
+}
+
+/* Zwei Ringe, versetzt — eine einzelne Welle liest sich als Zufall,
+   zwei als Signal. */
+.d-place__ring,
+.d-place__ring::after {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 40px;
-  height: 40px;
-  margin: -20px 0 0 -20px;
+  width: 54px;
+  height: 54px;
+  margin: -27px 0 0 -27px;
   border-radius: 50%;
-  border: 1px solid rgba(217, 194, 255, 0.55);
-  animation: dRing 3s ease-out infinite;
+  border: 2px solid rgba(217, 194, 255, 0.8);
+  animation: dRing 2.6s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+}
+.d-place__ring::after {
+  content: '';
+  margin: -27px 0 0 -27px;
+  animation-delay: 1.3s;
 }
 @keyframes dRing {
-  0% { transform: scale(0.45); opacity: 0; }
-  30% { opacity: 0.95; }
-  100% { transform: scale(1.6); opacity: 0; }
+  0% { transform: scale(0.35); opacity: 0; }
+  18% { opacity: 1; }
+  100% { transform: scale(2.1); opacity: 0; }
 }
+/* Noch nicht gerendert: da ist der Knoten dunkel und ruhig — man sieht ihm an,
+   dass es hier noch nichts zu holen gibt. */
 .d-place.is-soon .d-place__dot {
-  background: rgba(217, 194, 255, 0.32);
+  width: 12px;
+  height: 12px;
+  background: rgba(217, 194, 255, 0.3);
   box-shadow: none;
-}
-.d-place.is-soon .d-place__ring {
   animation: none;
-  border-color: rgba(217, 194, 255, 0.18);
+}
+.d-place.is-soon .d-place__ring,
+.d-place.is-soon .d-place__ring::after {
+  animation: none;
+  border-color: rgba(217, 194, 255, 0.16);
+  border-width: 1px;
+  transform: scale(0.7);
+  opacity: 1;
 }
 .d-place.is-visited .d-place__dot {
-  background: var(--w-orange);
-  box-shadow: 0 0 18px var(--w-orange);
+  background: radial-gradient(circle at 50% 40%, #fff 0%, var(--w-orange-bright, #ffc48a) 45%, var(--w-orange) 100%);
+  box-shadow: 0 0 24px 6px rgba(255, 154, 77, 0.85), 0 0 60px 12px rgba(255, 154, 77, 0.3);
+}
+.d-place.is-visited .d-place__ring,
+.d-place.is-visited .d-place__ring::after {
+  border-color: rgba(255, 196, 138, 0.75);
 }
 .d-place:hover:not(:disabled) .d-place__dot {
-  transform: scale(1.35);
+  animation-play-state: paused;
+  transform: scale(1.45);
 }
 
 /* Die Karte am Ort — sie sagt, was einen erwartet, bevor man klickt. */
