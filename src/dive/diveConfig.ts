@@ -62,8 +62,10 @@ export const WORLD = {
 export const PLACES: Place[] = [
   {
     id: 'halle',
-    x: 47,
-    y: 47,
+    // NICHT auf der Kuppel: Der Einflug fliegt durch sie hindurch, der Punkt
+    // gehoert dahinter — in die Luecke zwischen den beiden Felsen.
+    x: 48,
+    y: 24,
     name: 'Die Kuppelhalle',
     claim: 'Ein funktionierender Prozess ist nicht automatisch ein guter Prozess.',
     dive: '/dive/vid/tauchgang.mp4',
@@ -119,15 +121,16 @@ export const PLACES: Place[] = [
   // Raum (~$0,71).
   {
     id: 'tangwald',
-    x: 13,
-    y: 34,
+    x: 15,
+    y: 30,
     name: 'Der Tangwald',
     claim: 'Informationen sind vorhanden. Aber nicht dort, wo sie gebraucht werden.',
   },
   {
     id: 'wrack',
-    x: 78,
-    y: 30,
+    // Auf die erleuchtete Luke im Rumpf — da geht man hinein.
+    x: 84,
+    y: 27,
     name: 'Das Wrack',
     claim: 'Manche Systeme laufen nur noch, weil niemand sie abschalten will.',
   },

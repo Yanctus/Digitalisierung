@@ -20,14 +20,9 @@
   transition: opacity 0.7s cubic-bezier(0.16, 0.84, 0.28, 1);
 }
 .d-root.is-world .d-layer--world,
-.d-root.is-launch .d-layer--world,
 .d-root.is-room .d-layer--room {
   opacity: 1;
   pointer-events: auto;
-}
-/* Während der Rochen fliegt, gehört ihm das Bild: keine Klicks, keine Karten. */
-.d-root.is-launch .d-layer--world {
-  pointer-events: none;
 }
 /* Tauchgang und Auftauchen liegen über allem und sind der Schnitt selbst.
    Kurze Blende: Sie laufen schon, wenn sie erscheinen. */
@@ -71,19 +66,6 @@
 }
 
 /* ---------- Der Rochen ---------- */
-/* Die Canvas liegt über dem ganzen Bildrahmen. Gezeichnet wird additiv — das
-   Schwarz des Ausgangsbilds trägt dabei nichts bei, deshalb braucht es weder
-   Alphakanal noch Blendmodus, und es entsteht keine Kante.
-   Läuft kein Skript, bleibt sie schlicht leer. */
-.d-ray {
-  position: absolute;
-  inset: 0;
-  z-index: 6;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
 /* ---------- Die Orte ---------- */
 .d-place {
   position: absolute;
@@ -99,9 +81,6 @@
 }
 .d-place:disabled {
   cursor: default;
-}
-.d-root.is-launch .d-place {
-  opacity: 0;
 }
 
 /* Der Knoten selbst: deutlich größer als vorher, mit eigenem Herzschlag.

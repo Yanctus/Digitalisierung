@@ -1,8 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { WORLD, PLACES, type Place } from './diveConfig'
-import RayLayer from './RayLayer'
 
-type Phase = 'world' | 'launch' | 'diving' | 'room' | 'rising'
+/**
+ * Der Splitterrochen ist vorerst ausgebaut — `RayLayer.tsx` liegt weiter im
+ * Projekt, wird aber nicht eingehängt. Weder als PNG-Ebene noch als
+ * Canvas-Lichterscheinung hat er getragen; die Idee bleibt, die Umsetzung ist
+ * offen. Mit ihm entfällt auch die Phase `launch`: Ein Klick führt jetzt
+ * direkt in den Tauchgang.
+ */
+type Phase = 'world' | 'diving' | 'room' | 'rising'
 
 /**
  * Die Unterwasserwelt: sehen — hineintauchen — zurück.
@@ -57,48 +63,20 @@ export default function DiveWorld() {
   }, [phase])
 
   const failsafe = useRef(0)
-  const launchGuard = useRef(0)
-  const startDiveRef = useRef<(() => void) | null>(null)
-  /** Der laufende Ort, damit der Rochen-Rückruf ihn ohne Neubindung findet. */
-  const placeRef = useRef<Place | null>(null)
-  useEffect(() => {
-    placeRef.current = place
-  }, [place])
 
   /**
-   * Klick auf einen Ort: Erst fliegt der Rochen hin, dann fährt die Kamera
-   * hinterher. Er führt den Tauchgang an, statt daneben zu existieren.
-   */
-  const dive = useCallback((p: Place) => {
-    if (!p.dive || !p.room) return
-    setPlace(p)
-    setOpenSpot(null)
-    setVisited((v) => (v.includes(p.id) ? v : [...v, p.id]))
-    setPhase('launch')
-    /**
-     * Reißleine für den Anflug. Meldet der Rochen sein Ankommen nie — weil
-     * `requestAnimationFrame` im Hintergrund-Tab pausiert oder die Grafik
-     * hakt —, bliebe der Besucher für immer in der Welt stehen und der Klick
-     * hätte nichts bewirkt. Nach gut der doppelten Fluglänge geht es ohnehin
-     * weiter.
-     */
-    window.clearTimeout(launchGuard.current)
-    launchGuard.current = window.setTimeout(() => startDiveRef.current?.(), 2000)
-  }, [])
-
-  /**
-   * Der Rochen ist am Ort angekommen — jetzt übernimmt die Kamera.
+   * Klick auf einen Ort — die Kamera fährt hinein.
    *
    * Der Tauchgang wird erst gezeigt, wenn er wirklich läuft: Vorher wurde die
    * Ebene sofort eingeblendet und das Video parallel gestartet, dann stand für
    * einen Moment ein Standbild im Bild, das nicht zur laufenden Weltschleife
    * passte, und es zuckte sichtbar.
    */
-  const startDive = useCallback(() => {
-    const p = placeRef.current
-    if (!p?.dive) return
-    // Ob der Rochen ankommt oder die Reißleine zieht — losfahren darf nur einer.
-    window.clearTimeout(launchGuard.current)
+  const dive = useCallback((p: Place) => {
+    if (!p.dive || !p.room) return
+    setPlace(p)
+    setOpenSpot(null)
+    setVisited((v) => (v.includes(p.id) ? v : [...v, p.id]))
 
     const v = diveRef.current
     const start = () => {
@@ -117,22 +95,25 @@ export default function DiveWorld() {
       return
     }
     v.currentTime = 0
-    let started = false
-    const once = () => {
-      if (started) return
-      started = true
-      start()
+    /**
+     * Drei Wege können den Tauchgang auslösen — `playing`, die 400-ms-Notbremse
+     * und die Ablehnung von `play()`. Ohne diesen Riegel liefen zwei davon:
+     * die Ablehnung schaltete sofort in den Raum, der Timer kurz darauf in den
+     * Tauchgang. Ergebnis war eine Seite, die erst ankommt und dann losfliegt.
+     */
+    let claimed = false
+    const claim = (fn: () => void) => () => {
+      if (claimed) return
+      claimed = true
+      fn()
     }
-    v.addEventListener('playing', once, { once: true })
+    const go = claim(start)
+    v.addEventListener('playing', go, { once: true })
     // Falls `playing` ausbleibt, nicht ewig auf der Welt stehen bleiben.
-    window.setTimeout(once, 400)
+    window.setTimeout(go, 400)
     const pr = v.play()
-    if (pr && pr.catch) pr.catch(() => setPhase('room'))
+    if (pr && pr.catch) pr.catch(claim(() => setPhase('room')))
   }, [])
-
-  useEffect(() => {
-    startDiveRef.current = startDive
-  }, [startDive])
 
   /**
    * Beim Betreten der Halle die Schleife auf Frame 0 setzen.
@@ -154,13 +135,7 @@ export default function DiveWorld() {
     if (p && p.catch) p.catch(() => {})
   }, [phase])
 
-  useEffect(
-    () => () => {
-      window.clearTimeout(failsafe.current)
-      window.clearTimeout(launchGuard.current)
-    },
-    [],
-  )
+  useEffect(() => () => window.clearTimeout(failsafe.current), [])
 
   /**
    * Auftauchen: derselbe Weg rückwärts.
@@ -264,15 +239,6 @@ export default function DiveWorld() {
               </span>
             </button>
           ))}
-
-          {/* Der Rochen liegt IM Bildrahmen, damit er dieselben Prozentwerte
-              benutzt wie die Orte — sonst zielt er daneben, sobald das Fenster
-              ein anderes Format hat als der Clip. */}
-          <RayLayer
-            mode={phase === 'launch' ? 'launch' : phase === 'world' ? 'idle' : 'hidden'}
-            target={phase === 'launch' && place ? { x: place.x, y: place.y } : null}
-            onArrived={startDive}
-          />
         </div>
         <div className="d-vignette" aria-hidden="true" />
 
