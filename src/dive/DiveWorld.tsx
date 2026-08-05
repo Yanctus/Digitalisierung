@@ -1,29 +1,28 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { WORLD, PLACES, type Place } from './diveConfig'
+import DivePage from './DivePage'
 
 type Phase = 'world' | 'diving' | 'room' | 'rising'
 
 /**
- * Die Unterwasserwelt: sehen — hineintauchen — zurück.
+ * Die Unterwasserwelt: sehen — hineintauchen — entdecken — zurück.
  *
- * Drei Zustände, sonst nichts. Die Welt läuft als Schleife und wartet, der
- * Tauchgang läuft genau einmal, der Raum läuft wieder als Schleife.
- *
- * Der Rückweg ist bewusst **kein rückwärts abgespielter Tauchgang**. Das wäre
- * gratis, aber es dreht jede Bewegung im Bild um — dieselbe Falle, in die die
- * Ping-Pong-Schleifen getappt sind. Stattdessen blendet der Raum auf die Welt
- * zurück. Ob das billig wirkt, ist genau die Frage, die dieser Prototyp
- * beantworten soll.
+ * Welt und Raum laufen als Schleifen. Dazwischen liegen zwei einmalige,
+ * vorgerenderte Kamerafahrten. Beim Auftauchen fährt die Innenseite zuerst
+ * weich zu ihrem Hero zurück; erst dort startet der eigene Rückweg-Clip.
  */
 export default function DiveWorld() {
   const [phase, setPhase] = useState<Phase>('world')
   const [place, setPlace] = useState<Place | null>(null)
   const [openSpot, setOpenSpot] = useState<string | null>(null)
   const [visited, setVisited] = useState<string[]>([])
+  const [surfacePending, setSurfacePending] = useState(false)
   const diveRef = useRef<HTMLVideoElement>(null)
   const riseRef = useRef<HTMLVideoElement>(null)
   const worldRef = useRef<HTMLVideoElement>(null)
   const roomRef = useRef<HTMLVideoElement>(null)
+  const roomLayerRef = useRef<HTMLDivElement>(null)
+  const surfaceRun = useRef(0)
 
   /** Schleifen müssen laufen. Autoplay, Hintergrund-Tab und Sparmodus können
       sie anhalten — deshalb bei jedem dieser Anlässe neu anstoßen. */
@@ -52,6 +51,16 @@ export default function DiveWorld() {
 
   const failsafe = useRef(0)
 
+  const enterRoom = useCallback(() => {
+    window.clearTimeout(failsafe.current)
+    if (roomLayerRef.current) {
+      roomLayerRef.current.scrollTop = 0
+      roomLayerRef.current.style.setProperty('--dp-progress', '0')
+    }
+    setSurfacePending(false)
+    setPhase('room')
+  }, [])
+
   /**
    * Der Tauchgang wird erst gezeigt, wenn er wirklich läuft.
    *
@@ -64,6 +73,9 @@ export default function DiveWorld() {
     if (!p.dive || !p.room) return
     setPlace(p)
     setOpenSpot(null)
+    setSurfacePending(false)
+    surfaceRun.current += 1
+    if (roomLayerRef.current) roomLayerRef.current.scrollTop = 0
     setVisited((v) => (v.includes(p.id) ? v : [...v, p.id]))
 
     const v = diveRef.current
@@ -73,13 +85,13 @@ export default function DiveWorld() {
       // der Besucher sonst vor einem schwarzen Bild ohne Ausweg.
       window.clearTimeout(failsafe.current)
       failsafe.current = window.setTimeout(
-        () => setPhase('room'),
+        () => enterRoom(),
         ((v?.duration || 5) + 1) * 1000,
       )
     }
 
     if (!v) {
-      setPhase('room')
+      enterRoom()
       return
     }
     v.currentTime = 0
@@ -93,10 +105,16 @@ export default function DiveWorld() {
     // Falls `playing` ausbleibt, nicht ewig auf der Welt stehen bleiben.
     window.setTimeout(once, 400)
     const pr = v.play()
-    if (pr && pr.catch) pr.catch(() => setPhase('room'))
-  }, [])
+    if (pr && pr.catch) pr.catch(() => enterRoom())
+  }, [enterRoom])
 
-  useEffect(() => () => window.clearTimeout(failsafe.current), [])
+  useEffect(
+    () => () => {
+      surfaceRun.current += 1
+      window.clearTimeout(failsafe.current)
+    },
+    [],
+  )
 
   /**
    * Auftauchen: derselbe Weg rückwärts.
@@ -107,7 +125,8 @@ export default function DiveWorld() {
    * und Partikel rückwärts laufen, fällt bei dem Tempo und der
    * Bewegungsunschärfe nicht auf — anders als in einer ruhigen Schleife.
    */
-  const surface = useCallback(() => {
+  const beginRise = useCallback(() => {
+    setSurfacePending(false)
     // Die Reißleine MUSS hier weg. Sonst schaltet sie Sekunden später zurück
     // in einen Raum, den es nicht mehr gibt — schwarzes Bild ohne Ausweg.
     window.clearTimeout(failsafe.current)
@@ -140,6 +159,44 @@ export default function DiveWorld() {
         window.setTimeout(() => setPlace(null), 700)
       })
   }, [])
+
+  /**
+   * Wer tief in der Seite steht, taucht nicht mitten im Text ab. Zuerst fährt
+   * die Seite kontrolliert zum lebenden Hero zurück; erst dort übernimmt der
+   * fertig rückwärts enkodierte Tauchgang.
+   */
+  const surface = useCallback(() => {
+    if (phase !== 'room' || surfacePending) return
+    setSurfacePending(true)
+    setOpenSpot(null)
+
+    const scroller = roomLayerRef.current
+    const run = ++surfaceRun.current
+    const rise = () => {
+      if (run !== surfaceRun.current) return
+      beginRise()
+    }
+
+    if (!scroller || scroller.scrollTop < 2) {
+      if (scroller) scroller.scrollTop = 0
+      rise()
+      return
+    }
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    scroller.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' })
+    const startedAt = performance.now()
+    const watch = () => {
+      if (run !== surfaceRun.current) return
+      if (scroller.scrollTop < 2 || performance.now() - startedAt > 2200) {
+        scroller.scrollTop = 0
+        rise()
+        return
+      }
+      requestAnimationFrame(watch)
+    }
+    requestAnimationFrame(watch)
+  }, [beginRise, phase, surfacePending])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -221,7 +278,7 @@ export default function DiveWorld() {
           preload="auto"
           onEnded={() => {
             window.clearTimeout(failsafe.current)
-            setPhase('room')
+            enterRoom()
           }}
         />
       </div>
@@ -248,7 +305,16 @@ export default function DiveWorld() {
           (sticky), und wer weiterscrollt, zieht den Text darüber. Die
           Bedienelemente liegen bewusst AUSSERHALB des Scrollbereichs, sonst
           wandern sie beim Scrollen mit weg. */}
-      <div className="d-layer d-layer--room">
+      <div
+        className="d-layer d-layer--room"
+        ref={roomLayerRef}
+        data-testid="dive-room-scroll"
+        onScroll={(event) => {
+          const el = event.currentTarget
+          const max = Math.max(1, el.scrollHeight - el.clientHeight)
+          el.style.setProperty('--dp-progress', String(el.scrollTop / max))
+        }}
+      >
         {place?.room && (
           <div className="d-room">
             <div className="d-room__hero">
@@ -303,21 +369,11 @@ export default function DiveWorld() {
             </span>
 
             {place.page && (
-              <section className="d-page">
-                <p className="d-page__lead">{place.page.lead}</p>
-                {place.page.blocks.map((b) => (
-                  <article className="d-page__block" key={b.title}>
-                    <h3>{b.title}</h3>
-                    <p>{b.body}</p>
-                  </article>
-                ))}
-                <div className="d-page__end">
-                  <button type="button" className="p-btn p-btn--primary" onClick={surface}>
-                    <span>Zurück ins Riff</span>
-                    <span className="p-btn__arrow" aria-hidden="true" />
-                  </button>
-                </div>
-              </section>
+              <DivePage
+                page={place.page}
+                onSurface={surface}
+                surfacePending={surfacePending}
+              />
             )}
           </div>
         )}
@@ -326,12 +382,18 @@ export default function DiveWorld() {
       {/* Bedienelemente des Raums — fest, außerhalb des Scrollbereichs */}
       {shown === 'room' && place && (
         <>
-          <button type="button" className="t-cham__close d-room__exit" onClick={surface}>
+          <button
+            type="button"
+            className="t-cham__close d-room__exit"
+            onClick={surface}
+            disabled={surfacePending}
+            data-testid="surface-button"
+          >
             <span className="t-cham__closeIcon" aria-hidden="true">
               <i />
               <i />
             </span>
-            Auftauchen
+            {surfacePending ? 'Zum Ausgang' : 'Auftauchen'}
           </button>
 
           <aside className={'t-panel' + (spot ? ' is-open' : '')} aria-hidden={!spot}>
