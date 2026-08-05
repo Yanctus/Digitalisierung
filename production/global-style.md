@@ -4,7 +4,18 @@
 nicht „verbessert", nicht gekürzt. Jede Änderung ist eine bewusste Entscheidung
 und braucht eine neue Versionsnummer sowie einen Eintrag im Ledger.
 
-Version: `1.1` · angelegt 05.08.2026 · geändert 05.08.2026
+Version: `1.2` · angelegt 05.08.2026 · zuletzt geändert 05.08.2026
+
+**Änderung 1.1 → 1.2 (bewusst, nach dem Farbreferenzbild „blühender Ast im
+Abendlicht"):** Die Welt war zu kalt — Indigo und Blaugrün dominierten. Die
+Referenz zeigt **Violett als Körperfarbe und einen warmen orangen Schein weit
+im Hintergrund**, der alles von hinten anleuchtet und die Oberkanten rimmt.
+Blau ist damit nicht mehr Grundton, sondern nur noch Tiefe.
+
+Die Regel „Orange ist nie Fläche" wird dabei **präzisiert, nicht aufgegeben**:
+Orange darf **Licht in der Ferne** sein (Schein, Gegenlicht, Rimlight) und
+**kleiner Akzent** (Blüte, Fensterlicht). Es bleibt verboten als Material,
+Anstrich oder Leuchtschlauch.
 
 **Änderung 1.0 → 1.1 (bewusst, nach Referenzbildern des Auftraggebers):**
 Die Detailstufe wurde umgekehrt. 1.0 verlangte „simplified sculpted forms, soft
@@ -37,7 +48,7 @@ Szene passt dort nicht hinein. Diese Fassung ist keine Neuformulierung, sondern
 eine Kürzung mit **denselben verbindlichen Begriffen** aus der Farbwelt-Tabelle:
 
 ```
-Richly detailed painterly 3D illustration of an underwater world, dark and jewel-like. Deep indigo and midnight blue water. Ornate structures grown from violet and magenta coral, with filigree domes, arched ribs, riveted plating and wrought metal detail. Warm orange appears only as thin glowing veins running along paths and surfaces and as small lit windows - always a fine line or a small glow, never a broad surface and never a thick tube. Bioluminescent jellyfish drift through the water. Caustic light patterns and soft god rays fall from far above. Volumetric haze, wet reflections, fine drifting particles, cinematic lighting, high contrast between deep shadow and glowing accents. Full bleed. No text, no letters, no logos, no signage, no neon cyberpunk look, no black bars, no letterboxing.
+Richly detailed painterly 3D illustration of an underwater world, dark and jewel-like. Deep violet and magenta throughout, with a warm orange glow far in the background like a sunset seen through water, backlighting the whole scene and rimming the top edges of every structure in warm light. Ornate forms grown from violet coral and kelp, with filigree domes, arched ribs and wrought detail. Small orange blossoms and tiny lit windows are scattered as warm accents. Bioluminescent life drifts through the water. Volumetric haze, soft god rays, wet reflections, fine drifting particles, cinematic lighting, high contrast between deep violet shadow and warm glow. Full bleed. No text, no letters, no logos, no signage, no neon cyberpunk look, no black bars, no letterboxing.
 ```
 
 **`prompt_optimizer` muss `false` sein.** Sonst schreibt Minimax den Stil um —
