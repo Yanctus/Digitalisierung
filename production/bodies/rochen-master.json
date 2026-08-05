@@ -1,0 +1,8 @@
+{
+  "model": "image-01",
+  "prompt": "Stylised painterly 3D illustration, hand-painted game world: bold silhouettes, simplified sculpted forms, soft painterly surfaces, strong contrast between deep shadow and glowing accent light. Deep violet, indigo and midnight blue base. Grown organic structures with fine glowing violet nodes. Warm luminous orange only as flowing energy along paths and seams, plus lantern and rim light - always a line or a glow, never a surface. Underwater: drifting particles, god rays from far above, volumetric haze, soft bloom. Cinematic lighting, clean readable silhouettes. No text, no letters, no logos, no signage. A single mechanical manta ray seen from above at a three-quarter angle, wings spread wide, isolated on a plain flat pure black background with nothing else in the image. Its body is built from dark faceted plates and a lattice of glowing violet filaments; the leading edges of the wings catch warm orange light and one bright orange eye glows at the front. A long thin trailing tail draws behind it. Elegant, constructed, calm, never cute and never cartoonish. Centred and complete, nothing cropped, with a generous empty margin on all sides.",
+  "aspect_ratio": "16:9",
+  "n": 1,
+  "prompt_optimizer": false,
+  "response_format": "url"
+}

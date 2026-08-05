@@ -1,0 +1,8 @@
+{
+  "model": "image-01",
+  "prompt": "Stylised painterly 3D illustration, hand-painted game world: bold silhouettes, simplified sculpted forms, soft painterly surfaces, strong contrast between deep shadow and glowing accent light. Deep violet, indigo and midnight blue base. Grown organic structures with fine glowing violet nodes. Warm luminous orange only as flowing energy along paths and seams, plus lantern and rim light - always a line or a glow, never a surface. Underwater: drifting particles, god rays from far above, volumetric haze, soft bloom. Cinematic lighting, clean readable silhouettes. No text, no letters, no logos, no signage, no creatures or fish. A whole underwater reef city on one great floating reef plateau, seen from outside at a high isometric three-quarter angle, tilt-shift miniature look, surrounded by deep dark open water. Five distinct places are clearly separated and readable: on the left a domed archive reef of glowing cells, on the right a great sunken wooden ship lying along the edge, in the front centre a wide hall of arches, behind it a garden terrace of soft glowing blooms, and at the top a tall slender observatory spire with one beam of light rising from it. Warm orange light flows along the paths between all five places like veins. The whole city reads clearly at a glance.",
+  "aspect_ratio": "16:9",
+  "n": 1,
+  "prompt_optimizer": false,
+  "response_format": "url"
+}

@@ -14,6 +14,20 @@ Version: `1.0` · angelegt 05.08.2026
 Stylised painterly 3D illustration with the graphic language of a hand-painted game world - bold silhouettes, simplified sculpted forms, soft painterly surfaces without fine photoreal texture detail, and strong contrast between deep shadow and glowing accent light. Deep violet, indigo and midnight blue as the base of every frame. Structures, coral, kelp and architecture are built from grown organic forms with fine glowing violet nodes running through them. Warm luminous orange appears only as flowing energy - light travelling along paths, seams and connections, plus lantern light, rim light and backlight. Orange is always a line or a glow, never a surface. Underwater: drifting particles, soft god rays falling from far above, volumetric haze, soft bloom, subtle film grain, calm slightly surreal atmosphere. No text, no letters, no logos, no signage, no user interface elements.
 ```
 
+## IMAGE_STYLE (kompakte Fassung — nur für Masterbilder)
+
+Minimax begrenzt den Prompt auf **1500 Zeichen**. Der volle STYLE_BLOCK plus
+Szene passt dort nicht hinein. Diese Fassung ist keine Neuformulierung, sondern
+eine Kürzung mit **denselben verbindlichen Begriffen** aus der Farbwelt-Tabelle:
+
+```
+Stylised painterly 3D illustration, hand-painted game world: bold silhouettes, simplified sculpted forms, soft painterly surfaces, strong contrast between deep shadow and glowing accent light. Deep violet, indigo and midnight blue base. Grown organic structures with fine glowing violet nodes. Warm luminous orange only as flowing energy along paths and seams, plus lantern and rim light - always a line or a glow, never a surface. Underwater: drifting particles, god rays from far above, volumetric haze, soft bloom. Cinematic lighting, clean readable silhouettes. No text, no letters, no logos, no signage, no creatures or fish.
+```
+
+**`prompt_optimizer` muss `false` sein.** Sonst schreibt Minimax den Stil um —
+genau das, was die Regel „kein kreatives Umschreiben bestehender
+Stildefinitionen" verbietet.
+
 ## NEGATIVE_CONSTRAINTS (wortgleich)
 
 ```

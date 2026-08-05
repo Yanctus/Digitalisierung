@@ -56,5 +56,42 @@
     }
   ],
 
-  "produktionsserie_riff": []
+  "produktionsserie_riff": [
+    {
+      "id": "img-v1",
+      "datei": "production/masters/v1-quadratisch/*.png",
+      "beschreibung": "Masterbilder Versuch 1 — Welt, Wrack, Rochen",
+      "prompt_datei": "production/scenes/{00-world,02-wrack,rochen}-master.md",
+      "prompt_hash": ["71d4d865f67a", "d6c6c2e6f77d", "71ec627a3b2f"],
+      "modell": "minimax/image-01",
+      "parameter": { "width": 1920, "height": 1080, "n": 1, "prompt_optimizer": false },
+      "kosten_usd": 0.0105,
+      "pruefergebnis": "INHALTLICH GUT, FORMAT FALSCH. Ergebnis 1024x1024 statt 16:9. Ursache: aspect_ratio hat den Standardwert 1:1 und Vorrang vor width/height, auch wenn es nicht gesetzt wird. Ein quadratisches Master ist als Frame-Lock gegen 16:9-Videos wertlos.",
+      "freigabe": "verworfen (Format)"
+    },
+    {
+      "id": "img-v2",
+      "datei": "production/masters/v2-neon/*.png",
+      "beschreibung": "Technisch begruendeter Retry — Prompt unveraendert, nur aspect_ratio 16:9",
+      "prompt_hash": ["71d4d865f67a", "d6c6c2e6f77d", "71ec627a3b2f"],
+      "modell": "minimax/image-01",
+      "parameter": { "aspect_ratio": "16:9", "n": 1, "prompt_optimizer": false },
+      "kosten_usd": 0.0105,
+      "pruefergebnis": "FORMAT RICHTIG (1280x720), INHALT ABGEDRIFTET. Magenta-Neonstreifen, orange Laserlinie quer durchs Bild, eine Figur am Ende des Gangs (verletzt 'no creatures'), schwarze Balken oben und unten eingebrannt. Ursachen: (a) beim Kuerzen auf 1500 Zeichen fiel 'No neon cyberpunk look' aus dem Stilblock, (b) kein Seed gepinnt, deshalb voellig andere Komposition, (c) keine Anweisung gegen Letterboxing.",
+      "freigabe": "verworfen (Inhalt)"
+    },
+    {
+      "id": "img-final",
+      "datei": "production/masters/{00-world-master,02-wrack-master,rochen-master}.{png,webp}",
+      "beschreibung": "Versuch 1 auf 16:9 beschnitten — KEINE neue Generierung",
+      "herkunft": "img-v1, crop 1024x576 mit gewaehltem Versatz je Bild, dann auf 1280x720 skaliert (lanczos)",
+      "versatz_y": { "welt": 250, "wrack": 330, "rochen": 224 },
+      "kosten_usd": 0.0,
+      "pruefergebnis": "Welt: fuenf Orte lesbar, orange Energiebahnen als Adern, Wrack oben mittig erkennbar. Wrack innen: Rippen, Kisten, Ketten, Laterne im mittleren unteren Band, keine Figur, keine Neonstreifen, keine Balken. Rochen: auf reinem Schwarz, per mix-blend-mode screen freistellbar; Schweif oben angeschnitten, unerheblich weil die Lichtspur als Webebene gezeichnet wird.",
+      "freigabe": "wartet auf Sichtpruefung"
+    }
+  ],
+
+  "_stand": "Retry-Kontingent fuer die Bildphase verbraucht (1 von 1). Keine weitere kostenpflichtige Bildgenerierung ohne neue Freigabe. Videos noch nicht gestartet.",
+  "_ausgegeben_bisher_usd": 0.021
 }

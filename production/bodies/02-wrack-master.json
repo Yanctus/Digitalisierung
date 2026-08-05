@@ -1,0 +1,8 @@
+{
+  "model": "image-01",
+  "prompt": "Stylised painterly 3D illustration, hand-painted game world: bold silhouettes, simplified sculpted forms, soft painterly surfaces, strong contrast between deep shadow and glowing accent light. Deep violet, indigo and midnight blue base. Grown organic structures with fine glowing violet nodes. Warm luminous orange only as flowing energy along paths and seams, plus lantern and rim light - always a line or a glow, never a surface. Underwater: drifting particles, god rays from far above, volumetric haze, soft bloom. Cinematic lighting, clean readable silhouettes. No text, no letters, no logos, no signage, no creatures or fish. Inside the hold of a great sunken wooden ship, seen straight on down its length. Heavy curved wooden ribs arch overhead, iron fittings and old crates sit along the sides, chains hang still in the water. Each object carries its own weak violet glow and none of them are connected to one another yet. A single warm orange lantern rests low on the centre of the deck. The important objects sit in the central and lower middle band of the frame; the upper left quarter and the right third stay calm and uncluttered.",
+  "aspect_ratio": "16:9",
+  "n": 1,
+  "prompt_optimizer": false,
+  "response_format": "url"
+}
