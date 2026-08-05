@@ -71,24 +71,17 @@
 }
 
 /* ---------- Der Rochen ---------- */
+/* Die Canvas liegt über dem ganzen Bildrahmen. Gezeichnet wird additiv — das
+   Schwarz des Ausgangsbilds trägt dabei nichts bei, deshalb braucht es weder
+   Alphakanal noch Blendmodus, und es entsteht keine Kante.
+   Läuft kein Skript, bleibt sie schlicht leer. */
 .d-ray {
   position: absolute;
+  inset: 0;
   z-index: 6;
-  width: 22%;
-  max-width: 340px;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
-  /* Ausgangszustand ohne Skript: an seinem Ruheplatz und unsichtbar. Läuft
-     `requestAnimationFrame` nicht (Tab im Hintergrund, Sparmodus), säße er
-     sonst unpositioniert und voll sichtbar in der oberen linken Ecke. */
-  left: 24%;
-  top: 26%;
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0.34);
-  /* Kein Alphakanal nötig: das Bild liegt auf reinem Schwarz, und Screen
-     löscht Schwarz bei einem leuchtenden Wesen sauberer als jede Maske. */
-  mix-blend-mode: screen;
-  will-change: transform, opacity, left, top;
-  filter: drop-shadow(0 0 18px rgba(255, 154, 77, 0.45));
 }
 
 /* ---------- Die Orte ---------- */

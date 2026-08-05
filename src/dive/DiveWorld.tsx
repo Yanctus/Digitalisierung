@@ -33,7 +33,12 @@ export default function DiveWorld() {
     // einmal — würde man sie hier mit anfassen, spielten sie sich nach dem
     // Ende endlos neu ab, weil sie dann „pausiert" sind.
     const kick = () => {
-      ;[worldRef, roomRef].forEach((r) => {
+      // Die Hallenschleife darf NUR laufen, wenn man auch drin ist. Sonst
+      // spielt sie waehrend des Tauchgangs unsichtbar mit, ist beim Ankommen
+      // schon Sekunden weit, und die Fische stehen ploetzlich woanders —
+      // genau der Sprung, der wie ein Schnitt aussieht.
+      const loops = phase === 'room' ? [worldRef, roomRef] : [worldRef]
+      loops.forEach((r) => {
         const v = r.current
         if (!v || document.hidden || !v.paused) return
         const p = v.play()
@@ -128,6 +133,26 @@ export default function DiveWorld() {
   useEffect(() => {
     startDiveRef.current = startDive
   }, [startDive])
+
+  /**
+   * Beim Betreten der Halle die Schleife auf Frame 0 setzen.
+   *
+   * Der Tauchgang endet exakt auf diesem Frame — nur wenn die Schleife auch
+   * dort beginnt, ist die Uebergabe unsichtbar. Ohne das Zuruecksetzen zeigt
+   * sie die Stelle, an der sie zuletzt stand.
+   */
+  useEffect(() => {
+    if (phase !== 'room') return
+    const v = roomRef.current
+    if (!v) return
+    try {
+      v.currentTime = 0
+    } catch {
+      /* egal */
+    }
+    const p = v.play()
+    if (p && p.catch) p.catch(() => {})
+  }, [phase])
 
   useEffect(
     () => () => {
@@ -307,10 +332,13 @@ export default function DiveWorld() {
                 src={place.room}
                 poster={place.poster}
                 loop
-                autoPlay
                 muted
                 playsInline
                 preload="auto"
+                /* Kein autoPlay: Das Element haengt schon beim Klick im DOM,
+                   wuerde also waehrend des Tauchgangs unsichtbar mitlaufen und
+                   waere beim Ankommen Sekunden weit. Gestartet wird es genau
+                   dann, wenn man die Halle betritt — von Frame 0. */
               />
               {place.hotspots?.map((h) => (
                 <button
