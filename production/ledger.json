@@ -1,18 +1,32 @@
 {
   "_zweck": "Ein Eintrag je kostenpflichtiger Generierung. Vor jeder neuen Generation wird hier gesucht, ob es das Ergebnis schon gibt.",
   "_pflichtfelder": [
-    "id", "datei", "prompt_hash", "prompt_datei", "modell", "modell_version",
-    "parameter", "seed", "startframe", "endframe", "monid_job_id", "kosten_usd",
-    "pruefergebnis", "freigabe"
+    "id",
+    "datei",
+    "prompt_hash",
+    "prompt_datei",
+    "modell",
+    "modell_version",
+    "parameter",
+    "seed",
+    "startframe",
+    "endframe",
+    "monid_job_id",
+    "kosten_usd",
+    "pruefergebnis",
+    "freigabe"
   ],
-
   "bestand_vor_dieser_produktionsserie": [
     {
       "id": "alt-01",
       "datei": "assets/scroll-world/dive/raw/welt.mp4",
       "beschreibung": "Isometrische Unterwasserwelt, stehende Kamera, 4 Orte angedeutet",
       "modell": "bytedance/seedance-2.0",
-      "parameter": { "resolution": "480p", "ratio": "16:9", "duration": 10 },
+      "parameter": {
+        "resolution": "480p",
+        "ratio": "16:9",
+        "duration": 10
+      },
       "seed": 28499,
       "kosten_usd": 0.706006,
       "pruefergebnis": "Kamera steht (27,5 dB erster gegen letzten Frame). Zeigt Tangwald, Kuppelhalle, Wrack, Schlot.",
@@ -24,7 +38,11 @@
       "datei": "assets/scroll-world/dive/raw/tauchgang.mp4",
       "beschreibung": "Einflug Welt -> Kuppelhalle, 5 s",
       "modell": "bytedance/seedance-2.0",
-      "parameter": { "resolution": "480p", "ratio": "16:9", "duration": 5 },
+      "parameter": {
+        "resolution": "480p",
+        "ratio": "16:9",
+        "duration": 5
+      },
       "seed": 21761,
       "kosten_usd": 0.354466,
       "pruefergebnis": "Startnaht 35,3 dB, Endnaht 24,2 dB. Rueckwaerts als auftauchen.mp4 nutzbar.",
@@ -36,7 +54,11 @@
       "datei": "assets/scroll-world/dive/raw/halle-loop.mp4",
       "beschreibung": "Kuppelhalle, loop-nativ (first_frame == last_frame)",
       "modell": "bytedance/seedance-2.0",
-      "parameter": { "resolution": "480p", "ratio": "16:9", "duration": 10 },
+      "parameter": {
+        "resolution": "480p",
+        "ratio": "16:9",
+        "duration": 10
+      },
       "seed": 8209,
       "kosten_usd": 0.706006,
       "pruefergebnis": "Anfang gegen Ende 37,7 dB — deutlich besser als nachtraeglich geschleift (30,8 dB).",
@@ -48,23 +70,35 @@
       "datei": "assets/scroll-world/dive/raw/raum.mp4",
       "beschreibung": "Korallenhalle, stehende Kamera, erster Versuch",
       "modell": "bytedance/seedance-2.0",
-      "parameter": { "resolution": "480p", "ratio": "16:9", "duration": 10 },
+      "parameter": {
+        "resolution": "480p",
+        "ratio": "16:9",
+        "duration": 10
+      },
       "seed": 28981,
       "kosten_usd": 0.706006,
       "pruefergebnis": "Kamera steht (30,8 dB). Von alt-03 abgeloest.",
       "freigabe": "abgeloest"
     }
   ],
-
   "produktionsserie_riff": [
     {
       "id": "img-v1",
       "datei": "production/masters/v1-quadratisch/*.png",
       "beschreibung": "Masterbilder Versuch 1 — Welt, Wrack, Rochen",
       "prompt_datei": "production/scenes/{00-world,02-wrack,rochen}-master.md",
-      "prompt_hash": ["71d4d865f67a", "d6c6c2e6f77d", "71ec627a3b2f"],
+      "prompt_hash": [
+        "71d4d865f67a",
+        "d6c6c2e6f77d",
+        "71ec627a3b2f"
+      ],
       "modell": "minimax/image-01",
-      "parameter": { "width": 1920, "height": 1080, "n": 1, "prompt_optimizer": false },
+      "parameter": {
+        "width": 1920,
+        "height": 1080,
+        "n": 1,
+        "prompt_optimizer": false
+      },
       "kosten_usd": 0.0105,
       "pruefergebnis": "INHALTLICH GUT, FORMAT FALSCH. Ergebnis 1024x1024 statt 16:9. Ursache: aspect_ratio hat den Standardwert 1:1 und Vorrang vor width/height, auch wenn es nicht gesetzt wird. Ein quadratisches Master ist als Frame-Lock gegen 16:9-Videos wertlos.",
       "freigabe": "verworfen (Format)"
@@ -73,9 +107,17 @@
       "id": "img-v2",
       "datei": "production/masters/v2-neon/*.png",
       "beschreibung": "Technisch begruendeter Retry — Prompt unveraendert, nur aspect_ratio 16:9",
-      "prompt_hash": ["71d4d865f67a", "d6c6c2e6f77d", "71ec627a3b2f"],
+      "prompt_hash": [
+        "71d4d865f67a",
+        "d6c6c2e6f77d",
+        "71ec627a3b2f"
+      ],
       "modell": "minimax/image-01",
-      "parameter": { "aspect_ratio": "16:9", "n": 1, "prompt_optimizer": false },
+      "parameter": {
+        "aspect_ratio": "16:9",
+        "n": 1,
+        "prompt_optimizer": false
+      },
       "kosten_usd": 0.0105,
       "pruefergebnis": "FORMAT RICHTIG (1280x720), INHALT ABGEDRIFTET. Magenta-Neonstreifen, orange Laserlinie quer durchs Bild, eine Figur am Ende des Gangs (verletzt 'no creatures'), schwarze Balken oben und unten eingebrannt. Ursachen: (a) beim Kuerzen auf 1500 Zeichen fiel 'No neon cyberpunk look' aus dem Stilblock, (b) kein Seed gepinnt, deshalb voellig andere Komposition, (c) keine Anweisung gegen Letterboxing.",
       "freigabe": "verworfen (Inhalt)"
@@ -85,21 +127,31 @@
       "datei": "production/masters/{00-world-master,02-wrack-master,rochen-master}.{png,webp}",
       "beschreibung": "Versuch 1 auf 16:9 beschnitten — KEINE neue Generierung",
       "herkunft": "img-v1, crop 1024x576 mit gewaehltem Versatz je Bild, dann auf 1280x720 skaliert (lanczos)",
-      "versatz_y": { "welt": 250, "wrack": 330, "rochen": 224 },
+      "versatz_y": {
+        "welt": 250,
+        "wrack": 330,
+        "rochen": 224
+      },
       "kosten_usd": 0.0,
       "pruefergebnis": "Welt: fuenf Orte lesbar, orange Energiebahnen als Adern, Wrack oben mittig erkennbar. Wrack innen: Rippen, Kisten, Ketten, Laterne im mittleren unteren Band, keine Figur, keine Neonstreifen, keine Balken. Rochen: auf reinem Schwarz, per mix-blend-mode screen freistellbar; Schweif oben angeschnitten, unerheblich weil die Lichtspur als Webebene gezeichnet wird.",
       "freigabe": "wartet auf Sichtpruefung"
     }
   ],
-
   "_phase_2_nach_referenzbildern": [
     {
       "id": "img-v3",
       "datei": "production/masters/v3-referenz/*.png",
       "beschreibung": "Erste Fassung nach den Referenzbildern des Auftraggebers. Stilblock auf v1.1 gehoben (Detailstufe umgekehrt: reich und ornamental statt vereinfacht).",
-      "prompt_hash": ["69b3a73b6992", "9b78e437172e"],
+      "prompt_hash": [
+        "69b3a73b6992",
+        "9b78e437172e"
+      ],
       "modell": "minimax/image-01",
-      "parameter": { "aspect_ratio": "16:9", "n": 1, "prompt_optimizer": false },
+      "parameter": {
+        "aspect_ratio": "16:9",
+        "n": 1,
+        "prompt_optimizer": false
+      },
       "kosten_usd": 0.007,
       "pruefergebnis": "Deutlich naeher an der Referenz. Zwei Fehler: (a) Welt zu flach fotografiert, Landschaft statt Karte von oben; (b) Wrack: das Orange wieder als dicke Leuchtschlaeuche an Waenden und Boden. Ursache (b) ist ein Regelverstoss von mir — im Prompt stand 'never a thick tube', also eine VERNEINUNG. Die Projektregel lautet seit dem Libellenfilm 'positiv formulieren, nie verneinen'.",
       "freigabe": "verworfen"
@@ -108,20 +160,65 @@
       "id": "img-v4",
       "datei": "production/masters/v4-positiv/*.png",
       "beschreibung": "Technisch begruendeter Retry: Verneinung durch positive Beschreibung ersetzt ('hairline traceries, thin as a scratch, like veins in a leaf'), Blickwinkel geschaerft ('45 degree isometric looking down, reads like a map').",
-      "prompt_hash": ["ddd874a5be97", "c6a3cce958f3"],
+      "prompt_hash": [
+        "ddd874a5be97",
+        "c6a3cce958f3"
+      ],
       "modell": "minimax/image-01",
-      "parameter": { "aspect_ratio": "16:9", "n": 1, "prompt_optimizer": false },
+      "parameter": {
+        "aspect_ratio": "16:9",
+        "n": 1,
+        "prompt_optimizer": false
+      },
       "kosten_usd": 0.007,
       "pruefergebnis": "WELT: sitzt. Karte von oben, Plateaus auf verschiedenen Hoehen, Bruecken mit orangem Pfad, Kathedralkuppel, Segelschiff, Spire, Korallen, Quallen, violette Wasserfaelle. WRACK: Architektur, Lichtschacht, Quallen, Bullaugen und Messingpulte sitzen — aber das Orange am Boden ist weiterhin zwei durchgehende Leuchtschienen statt feiner Adern. Narrativ relevant: das Kapitel soll UNVERBUNDEN beginnen, zwei durchgehende Schienen sind bereits verbunden.",
       "freigabe": "Welt vorgeschlagen, Wrack offen"
     }
   ],
-
-  "_stand": "Bildphase 2: Retry verbraucht (1 von 1). Welt v4 als Master vorgeschlagen. Wrack v4 hat einen benannten Restfehler (Bodenschienen). KEINE weitere kostenpflichtige Generierung ohne neue Freigabe. Videos nicht gestartet.",
-  "_ausgegeben_bisher_usd": 0.035,
+  "_stand": "Weltmaster v9 vorgeschlagen und eingefroren. Wrack-Master steht noch aus (Bodenschienen). Videos nicht gestartet.",
+  "_ausgegeben_bisher_usd": 0.049,
   "_naechster_vorschlag": {
     "was": "nur 02-wrack-master neu, 1 Bild",
     "kosten_usd": 0.0035,
     "aenderung": "Adern vom Boden auf Maschinen und Waende verlegen, Boden positiv als dunkel und nass ohne eigenes Licht beschreiben. Grund: der Boden hat starke lineare Plattenfugen, denen das Modell folgt — daraus werden zwangslaeufig Schienen."
-  }
+  },
+  "_phase_3_weltmaster_neu": [
+    {
+      "id": "img-v5",
+      "datei": "production/masters/v5-warm/",
+      "kosten_usd": 0.0035,
+      "pruefergebnis": "Farbe getroffen. Schlucht uebernahm das Bild, Text-Artefakt unten rechts (verletzt 'no text').",
+      "freigabe": "verworfen"
+    },
+    {
+      "id": "img-v6",
+      "datei": "production/masters/v6-plateau/",
+      "kosten_usd": 0.0035,
+      "pruefergebnis": "Farbe wunderschoen, aber ueber Wasser: Horizont sichtbar, Schiff schwimmt oben.",
+      "freigabe": "verworfen"
+    },
+    {
+      "id": "img-v8",
+      "datei": "production/masters/v8-tiefe/",
+      "kosten_usd": 0.0035,
+      "pruefergebnis": "DURCHBRUCH: eindeutig unter Wasser bei gleicher Waerme. Ursache des Auftauchens war das Wort 'sunset' — ein Sonnenuntergang ist per Definition ueber Wasser. Ersetzt durch 'the sun seen from far below through the surface'. Nur: die fuenf Orte nicht lesbar.",
+      "freigabe": "verworfen (Komposition)"
+    },
+    {
+      "id": "img-v9",
+      "datei": "production/masters/00-world-master.png",
+      "prompt_hash": "f40ea2ff70ff",
+      "kosten_usd": 0.0035,
+      "modell": "minimax/image-01",
+      "parameter": {
+        "aspect_ratio": "16:9",
+        "n": 1,
+        "prompt_optimizer": false
+      },
+      "monid_job_id": "01KZ891C5WZPA0FG9KFKREF8Y3",
+      "pruefergebnis": "Ganze Insel im Bild, Dreiviertelblick von oben. Tiefe, Waerme und Farbe von Referenzbild 2. Tangwald links, Kuppelhalle mit leuchtenden Fenstern Mitte, Schiffsmasten rechts dahinter, Spire oben, orange Blueten verstreut, violettes Licht faellt von der Unterseite. Schlucht und Observatorium nur angedeutet.",
+      "besonderheit": "CLI stuerzte beim Empfangen ab ('Unexpected token <'), Lauf war serverseitig fertig und bezahlt. Ueber `monid runs get` geborgen statt neu gerendert.",
+      "freigabe": "als 00_WORLD_MASTER vorgeschlagen"
+    }
+  ]
 }

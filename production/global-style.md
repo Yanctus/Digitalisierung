@@ -4,7 +4,17 @@
 nicht „verbessert", nicht gekürzt. Jede Änderung ist eine bewusste Entscheidung
 und braucht eine neue Versionsnummer sowie einen Eintrag im Ledger.
 
-Version: `1.2` · angelegt 05.08.2026 · zuletzt geändert 05.08.2026
+Version: `1.3` · angelegt 05.08.2026 · zuletzt geändert 05.08.2026
+
+**Änderung 1.2 → 1.3 (Fehlerkorrektur, real zweimal passiert):** 1.2 verlangte
+„a warm orange glow far in the background **like a sunset seen through water**".
+Ein Sonnenuntergang ist per Definition über Wasser — das Modell hat die Szene
+daraufhin beide Male an die Oberfläche geholt, samt Horizont und schwimmendem
+Schiff. Die Wärme kommt jetzt **von der Sonne, von unten gesehen, durch die
+Wasseroberfläche weit über der Szene**. Gleiche Farbe, verankerte Tiefe.
+
+Das ist dieselbe Lehre wie beim Libellenfilm: **Die Ursache lag nicht in der
+Farbe, sondern in einem Wort, das eine Welt mitbringt.**
 
 **Änderung 1.1 → 1.2 (bewusst, nach dem Farbreferenzbild „blühender Ast im
 Abendlicht"):** Die Welt war zu kalt — Indigo und Blaugrün dominierten. Die
@@ -48,7 +58,7 @@ Szene passt dort nicht hinein. Diese Fassung ist keine Neuformulierung, sondern
 eine Kürzung mit **denselben verbindlichen Begriffen** aus der Farbwelt-Tabelle:
 
 ```
-Richly detailed painterly 3D illustration of an underwater world, dark and jewel-like. Deep violet and magenta throughout, with a warm orange glow far in the background like a sunset seen through water, backlighting the whole scene and rimming the top edges of every structure in warm light. Ornate forms grown from violet coral and kelp, with filigree domes, arched ribs and wrought detail. Small orange blossoms and tiny lit windows are scattered as warm accents. Bioluminescent life drifts through the water. Volumetric haze, soft god rays, wet reflections, fine drifting particles, cinematic lighting, high contrast between deep violet shadow and warm glow. Full bleed. No text, no letters, no logos, no signage, no neon cyberpunk look, no black bars, no letterboxing.
+Richly detailed painterly 3D illustration set deep underwater, dark and jewel-like. Deep violet and magenta throughout. Far above the scene the sea surface glows warm orange, the sun seen from far below through the water, its light falling down in long shafts, backlighting everything and rimming the top edges of every structure in warm light. Ornate forms grown from violet coral and kelp, with filigree domes, arched ribs and wrought detail. Small orange blossoms and tiny lit windows are scattered as warm accents. Bioluminescent life drifts through the water. Volumetric haze, soft god rays, wet reflections, fine drifting particles, cinematic lighting, high contrast between deep violet shadow and warm glow. Full bleed. No text, no letters, no logos, no signage, no neon cyberpunk look, no black bars, no letterboxing.
 ```
 
 **`prompt_optimizer` muss `false` sein.** Sonst schreibt Minimax den Stil um —

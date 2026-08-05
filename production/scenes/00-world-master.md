@@ -21,5 +21,5 @@ Körperfarbe, warmer oranger Schein dahinter.
 
 ## SCENE_DESCRIPTION
 ```
-One entire great floating reef plateau, complete and fully visible inside the frame, seen from above at a three-quarter angle, surrounded by deep violet water with a warm orange glow far behind it. A tall forest of kelp and algae rises from the left half of the plateau, and a narrow slot canyon cuts into the reef floor between the stems. In the centre a large domed coral hall with glowing windows. On the right edge a great sunken sailing ship with masts. Behind the hall a slender observatory tower with a thin beam of light. Violet and magenta corals cover the plateau, small orange blossoms among them, and violet light falls away from its underside into the dark.
+Seen from high above at a three-quarter angle, the entire floating reef island fits inside the frame with open dark water all around it. Far left: a tall forest of kelp and algae. Cutting through that forest: a narrow canyon down into the rock. Centre: a domed coral hall with glowing windows. Near right: a great sunken sailing ship with masts lying across the island's edge. Behind the hall: a slender observatory tower with a thin beam of light. Violet and magenta corals with small orange blossoms cover everything, and violet light falls from the island's underside into the darkness below.
 ```
