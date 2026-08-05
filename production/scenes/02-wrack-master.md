@@ -1,14 +1,16 @@
-# 02_WRACK_MASTER — Innenraum des Wracks
+# 02_WRACK_MASTER — im Rumpf des Wracks
 
-Verbindliches Innenraum-Masterbild. Dreifach verwendet: Endframe von
-`02_WRACK_IN`, Poster des Kapitels, Startframe von `02_WRACK_CHAPTER`.
-Stil: `IMAGE_STYLE` (v1.1) aus global-style.md.
+Verbindliches Innenraum-Masterbild. Endframe-Ziel des Kapitels, Poster,
+Startframe von `02_WRACK_LOOP`.
+Stil: `WORLD_STYLE` (v2.0).
 
-Nach Referenzbild des Auftraggebers vom 05.08.2026: **Maschinenraum**, nicht
-leerer Holzladeraum. Bullaugen, Messingskalen, Nietenblech, Lichtschacht von
-oben, orange Adern im nassen Boden.
+**Leitmotiv: die hängende Ankerkette.** Bewusst *keine* Laterne — die haben
+Kuppelhalle und Tangwald schon. Siehe Motivtabelle in README.md.
+
+Die Kette sagt, worum es geht: Sie hängt noch an etwas, das niemand mehr
+benutzt. Und sie wiegt sich — richtungslose Bewegung, also schleifentauglich.
 
 ## SCENE_DESCRIPTION
 ```
-Inside the vast hold of a sunken ship, one-point perspective down its length. A huge arched ribbed ceiling with a broken opening above lets blue light shafts fall through. Round portholes along both walls show deep water outside. On the left a console of round brass gauges, on the right a massive riveted engine drum. Iron staircases lead up at the back. Fine hairline traceries of warm orange, thin as a scratch, wander across the wet floor plates and along the seams of the metal like veins in a leaf. Small round brass lamps glow at the console; the walls are lit by the blue portholes alone. Violet and magenta corals grow over the metal. Every object glows on its own, none are connected yet.
+Inside the hold of a great sunken wooden ship, looking down its length between the curved wooden ribs. In the middle of the space a heavy rusted anchor chain hangs down from an opening in the deck above and sways slowly. Behind it, rows of old crates and iron fittings stand along the walls. A single round port in the hull on the right lets a pale violet shaft of water light into the dark, and small orange glimmers sit on the wet metal. The important objects sit in the central and lower middle band of the frame.
 ```

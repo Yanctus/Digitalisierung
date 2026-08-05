@@ -1,0 +1,27 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Stylised painterly 3D illustration with the graphic language of a hand-painted game world - bold silhouettes, simplified sculpted forms, soft painterly surfaces without fine photoreal texture detail, and strong contrast between deep shadow and glowing accent light. Deep violet and midnight-blue water throughout, structures and living light in royal and electric violet. Warm orange reserved for lantern light, backlight, rim light and highlights - present but never dominant. Underwater world: slowly drifting particles, soft god rays falling from far above, volumetric haze, soft bloom, shallow depth of field, subtle film grain, calm slightly surreal atmosphere. Organic grown surfaces meet digital light structures. No text, no letters, no logos, no signage. SCENE: Inside the hold of the sunken ship, looking down its length. The shot is a PERFECT SEAMLESS LOOP: it begins and ends on exactly the same image, and every movement returns to its starting position by the end. The hanging anchor chain swings out and comes back, particles drift in a slow closed circulation, and the pale light through the round port brightens gently and settles again. Nothing enters the frame and nothing leaves it. CAMERA: the camera is locked on a tripod for the entire shot - no pan, no tilt, no dolly, no zoom, no orbit, no handheld drift. The framing of the last frame is identical to the framing of the first frame. Only the contents of the scene move, and because everything is underwater it drifts, sways and floats without any clear direction of travel. COMPOSITION: the important objects sit in the central and lower middle band of the frame; the upper left quarter and the right third stay calm and uncluttered."
+    },
+    {
+      "type": "image_url",
+      "image_url": {
+        "url": "https://sfs.monid.ai/LIYk_XOZKJuuRX-lTArcuQEaUC9qzYzG8xDtf5_FBg3rL1i_vieXYYoPaYZFW1dQPXChZhfTdBKdpQlFnNaDpThfllmggmcd_FeT-gtfY3vakj0KDFxycAw7x5anMLw7_Uimtd3Jt4VeHEk_8yuibGrierTyQ_MasNtYAb0SJNdpClIdsz-rtdR9KZBzHyy_FQ?e=1785948164"
+      },
+      "role": "first_frame"
+    },
+    {
+      "type": "image_url",
+      "image_url": {
+        "url": "https://sfs.monid.ai/LIYk_XOZKJuuRX-lTArcuQEaUC9qzYzG8xDtf5_FBg3rL1i_vieXYYoPaYZFW1dQPXChZhfTdBKdpQlFnNaDpThfllmggmcd_FeT-gtfY3vakj0KDFxycAw7x5anMLw7_Uimtd3Jt4VeHEk_8yuibGrierTyQ_MasNtYAb0SJNdpClIdsz-rtdR9KZBzHyy_FQ?e=1785948164"
+      },
+      "role": "last_frame"
+    }
+  ],
+  "resolution": "480p",
+  "ratio": "16:9",
+  "duration": 10,
+  "generate_audio": false,
+  "watermark": false
+}

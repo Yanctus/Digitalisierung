@@ -188,11 +188,64 @@ export const PLACES: Place[] = [
   },
   {
     id: 'wrack',
-    // Auf die erleuchtete Luke im Rumpf — da geht man hinein.
-    x: 84,
-    y: 27,
+    // Auf das runde, dunkle Loch im Rumpf. Genau dort fliegt die Kamera hinein,
+    // und genau dort wird das Bild schwarz — die Schwaerze ist der Uebergang.
+    x: 77,
+    y: 39,
     name: 'Das Wrack',
     claim: 'Manche Systeme laufen nur noch, weil niemand sie abschalten will.',
+    dive: '/dive/vid/wrack-in.mp4',
+    rise: '/dive/vid/wrack-out.mp4',
+    room: '/dive/vid/wrack.mp4',
+    poster: '/dive/still/wrack.jpg',
+    hotspots: [
+      {
+        id: 'kette',
+        // Nicht geschaetzt, sondern gemessen: vier Baender aus dem fertigen
+        // Clip nebeneinandergelegt und die Kette abgelesen. Sie pendelt
+        // zwischen 42,7 % und 34,5 % — Mitte 38,6, Amplitude 4,1, Phase 0,32.
+        x: 38.6,
+        y: 35,
+        sway: { x: 4.1, y: 0, phase: 0.32 },
+        label: 'Die Kette',
+        title: 'Sie hängt noch an etwas, das niemand mehr benutzt.',
+        body: 'In fast jedem Haus gibt es eine Verbindung, die nur deshalb besteht, weil sie einmal gebraucht wurde. Niemand traut sich, sie zu kappen — weil niemand mehr sagen kann, was daran hängt.',
+      },
+      {
+        id: 'anker',
+        // Liegt auf den Planken und bewegt sich nicht mit.
+        x: 45,
+        y: 76,
+        label: 'Der Anker',
+        title: 'Abschalten ist eine Entscheidung, kein Versehen.',
+        body: 'Ein altes System stirbt nicht von allein. Es muss jemand aufschreiben, was es tut, wer es braucht und was danach passiert. Genau diese drei Antworten fehlen meistens — deshalb läuft es weiter.',
+      },
+      {
+        id: 'kisten',
+        x: 16,
+        y: 58,
+        label: 'Die Kisten',
+        title: 'Nicht alles Alte muss verschwinden.',
+        body: 'Vieles hier funktioniert noch tadellos. Es steht nur nicht mehr im Zusammenhang. Ein Altsystem abzulösen ist selten die beste Antwort — es wieder anzuschließen oft die billigere.',
+      },
+    ],
+    page: {
+      lead: 'Kein Geschäftsführer entscheidet, ein System zwanzig Jahre laufen zu lassen. Es passiert, weil das Abschalten nie jemandes Aufgabe war und das Weiterlaufen nichts kostet, was in einer Auswertung auftaucht.',
+      blocks: [
+        {
+          title: 'Woran man ein System erkennt, das nur noch läuft',
+          body: 'Es gibt keine Lizenz mehr, aber es läuft. Es gibt keinen Ansprechpartner mehr, aber es läuft. Und es gibt genau eine Person, die weiß, wie man es neu startet, wenn es doch einmal stehenbleibt.',
+        },
+        {
+          title: 'Warum Ablösen nicht die erste Antwort ist',
+          body: 'Ein Altsystem zu ersetzen kostet ein Vielfaches davon, es wieder anzuschließen. Deshalb steht am Anfang die Frage, was es tatsächlich leistet — und ob eine Schnittstelle reicht, wo alle über eine Migration reden.',
+        },
+        {
+          title: 'Was am Ende bleibt',
+          body: 'Eine Liste dessen, was läuft, wofür es läuft und wer es verantwortet. Danach ist Abschalten eine Entscheidung, die man treffen kann, statt eines Risikos, das man meidet.',
+        },
+      ],
+    },
   },
   {
     id: 'schlot',

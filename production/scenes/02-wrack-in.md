@@ -1,20 +1,15 @@
-# 02_WRACK_IN — Einflug von der Hauptwelt ins Wrack
+# 02_WRACK_IN — Einflug durchs Loch im Rumpf
 
-Nur der Szenenblock. Stil, Kamera, Komposition und Negativvorgaben kommen aus
-`global-style.md` und werden programmatisch angehängt.
-
-- **Startreferenz:** `00_WORLD_MASTER.webp` (Rolle `first_frame`)
-- **Endreferenz:** `02_WRACK_MASTER.webp` (Rolle `last_frame`)
+- **Startreferenz:** Weltframe (`first_frame`)
+- **Endreferenz:** ein **rein schwarzes Bild** (`last_frame`)
 - **Kamerablock:** `FRAME_CONSTRAINTS`
-- **Weitere Referenzen:** keine
+
+Der Trick des Auftraggebers: Die Kamera fährt in das dunkle Loch im Rumpf, und
+dabei wird das Bild von selbst schwarz. **Die Schwärze ist der Übergang** — sie
+deckt die Naht zur Schleife, ganz ohne pixelgenauen Frame-Lock. Deshalb steht
+als Zielframe wirklich Schwarz und nicht der Innenraum.
 
 ## SCENE_DESCRIPTION
-
 ```
-The camera starts high above the whole reef city and rushes down and forward towards the great sunken wooden ship lying along the right side of the reef. It accelerates through the open water, particles and haze streaking past, then passes through the broken hull opening between the ribs of the ship and decelerates smoothly inside. The move is fast and exhilarating in the middle and completely still at the end, coming to rest looking down the length of the ship's inner hold.
+The camera rushes down and forward from high above the reef towards the great sunken ship lying on the right, accelerating hard along its wooden hull. It aims at one single round dark opening in the planking and flies straight into it. As it passes through the opening the wooden edges of the hole sweep past very close on all sides and the frame darkens quickly, until at the very end the image is completely black.
 ```
-
-## Anmerkung
-
-Der Rochen darf hier nicht auftauchen — weder im Prompt noch als Referenz. Er
-wird als Webebene darübergelegt und muss beim Rückwärtsabspielen mitspielen.

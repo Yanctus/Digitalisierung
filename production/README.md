@@ -63,3 +63,27 @@ Lichtpunkte, eine offene Truhe, eine aufsteigende Blasensäule.
 **Regel:** Vor jedem neuen Szenenblock in diese Tabelle schauen. Das Motiv in
 der Bildmitte darf sich nicht wiederholen — es ist das, was der Besucher als
 „der Raum" erinnert.
+
+## Klickpunkte auf Bewegtem: messen, nicht schätzen
+
+Sitzt ein Punkt auf etwas, das sich bewegt, taugt der Masterframe nicht als
+Vorlage — das Video verschiebt die Komposition, und das Objekt wandert
+zusätzlich. Real passiert: Die Ankerkette im Wrack wurde auf Amplitude 1,8
+geschätzt, gemessen waren es 4,1.
+
+**Verfahren** (kostet nichts, dauert eine Minute):
+
+```bash
+# Vier Zeitpunkte, jeweils das Band um die Punkthöhe, untereinander gestapelt
+for i in 0 1 2 3; do
+  T=$(python -c "print(f'{DAUER*$i/4:.3f}')")
+  ffmpeg -y -ss $T -i loop.mp4 -frames:v 1 \
+    -vf "crop=iw:ih*0.10:0:ih*0.30,scale=1100:-1" band$i.png
+done
+ffmpeg -y -i band0.png -i band1.png -i band2.png -i band3.png \
+  -filter_complex "[0][1][2][3]vstack=inputs=4,drawgrid=w=iw/20:h=ih:c=yellow" kette.png
+```
+
+Aus den vier Positionen ergeben sich Mitte, Amplitude und Phase. Die Engine
+rechnet `links = x + sin(2π·t/T·k + φ·2π)·ax` — für einen Kosinusverlauf ist
+`φ = 0,25 + Versatz`.
