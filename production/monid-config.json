@@ -1,0 +1,63 @@
+{
+  "_hinweis": "Schema am 05.08.2026 mit `monid inspect` geprueft, nicht angenommen. Waehrend einer Produktionsserie nicht ohne Grund aendern.",
+  "_freigegeben": false,
+
+  "geprueft_am": "2026-08-05",
+  "cli": "monid 0.1.6",
+
+  "varianten_vergleich": {
+    "_alle_drei_koennen_first_frame_und_last_frame": true,
+    "bytedance//v1/video/seedance-2.0": { "usd_pro_1M_token": 7.0, "hinweis": "bisher benutzt, bekannte Qualitaet" },
+    "bytedance//v1/video/seedance-2.0-fast": { "usd_pro_1M_token": 5.6, "hinweis": "20 % guenstiger, Qualitaet ungeprueft" },
+    "bytedance//v1/video/seedance-2.0-mini": { "usd_pro_1M_token": 3.5, "hinweis": "50 % guenstiger, Qualitaet ungeprueft" }
+  },
+
+  "token_rate": {
+    "_formel": "breite * hoehe * 24fps * sekunden / 1024",
+    "480p_16_9_pro_sekunde": 10086,
+    "720p_16_9_pro_sekunde": 21600,
+    "_480p_gemessen_an": "100858 Token fuer 10 s, real abgerechnet"
+  },
+
+  "video": {
+    "provider": "bytedance",
+    "endpoint": "/v1/video/seedance-2.0",
+    "_endpoint_offen": "Variante wartet auf Freigabe — siehe varianten_vergleich",
+    "body": {
+      "resolution": "720p",
+      "_resolution_offen": "Widerspruch in der Vorgabe: Pipeline sagt 480p Vorschau, Qualitaetsabschnitt sagt 720p fuer erste Tests",
+      "ratio": "16:9",
+      "generate_audio": false,
+      "watermark": false
+    },
+    "_ratio_immer_setzen": "sonst folgt das Video dem Seitenverhaeltnis des Eingangsbilds"
+  },
+
+  "bild": {
+    "provider": "minimax",
+    "endpoint": "/v1/image_generation",
+    "usd_pro_bild": 0.0035,
+    "_hinweis": "Preis pro Ergebnis, unabhaengig von Modus und Modell"
+  },
+
+  "dateiablage": {
+    "provider": "sfs",
+    "put": "/put",
+    "cat": "/cat",
+    "kosten": 0,
+    "_cat_url_haelt": "1 Stunde — vor einem Render notfalls neu cat-en"
+  },
+
+  "regeln": {
+    "retries_max": 1,
+    "retry_nur_mit": "technischer Begruendung",
+    "bei_zweitem_fehlschlag": "Job stoppen, dokumentieren, keine weitere kostenpflichtige Generation",
+    "vor_jeder_generation": [
+      "Zieldatei existiert schon?",
+      "freigegebenes Ergebnis mit gleichem Prompt-Hash vorhanden?",
+      "laesst sich Bestehendes zuschneiden, rueckwaerts abspielen oder wiederverwenden?",
+      "ist eine neue KI-Generation wirklich noetig?"
+    ],
+    "nie": "eine bestehende freigegebene Datei ueberschreiben"
+  }
+}

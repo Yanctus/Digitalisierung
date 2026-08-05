@@ -1,0 +1,44 @@
+# Produktion — Riff (Hub and Spoke)
+
+**Keine lineare Scroll-World-Kette.** Eine feste isometrische Hauptwelt, fünf
+unabhängig wählbare Orte. Jeder Weg beginnt in derselben Hauptwelt und endet in
+exakt derselben Hauptwelt. Es gibt **keine** Connector-Clips zwischen Orten.
+
+## Generierungsstopp
+
+Vor jeder kostenpflichtigen Generierung wird vorgelegt:
+geplante Dateien · Modell · Auflösung und Länge · geschätzte Kosten ·
+Prüfung des Bestands. **Erst nach Freigabe wird generiert.**
+Maximal ein technisch begründeter Retry. Danach: Job stoppen, dokumentieren.
+
+## Struktur
+
+| Pfad | Inhalt |
+|---|---|
+| `global-style.md` | Unveränderlicher Stilblock. Wird nicht umgeschrieben. |
+| `scenes/*.md` | Kurzer Szenenblock je Clip. Sonst nichts. |
+| `monid-config.json` | Geprüftes Schema, gewählte Variante, Regeln. |
+| `ledger.json` | Ein Eintrag je Generierung. Vorher hier suchen. |
+| `masters/` | Masterbilder (Frame-Lock-Referenzen). |
+| `out/` | Rohausgaben der Generierungen. |
+
+## Frame-Lock
+
+Jeder Ort hat ein verbindliches Innenraum-Masterbild. Dasselbe Bild ist:
+Endframe des IN-Videos · Poster des Kapitels · Startframe des CHAPTER-Videos.
+
+Nach jeder Generierung: erstes und letztes Frame mit ffmpeg ziehen, mit den
+Masterframes vergleichen, Übergang lokal testen. **Erst dann** weiter.
+Kleine Abweichung → Crossfade. Nur sichtbare Geometrieänderung rechtfertigt
+eine Neugenerierung.
+
+## Kein Rochen im Video
+
+Der Splitterrochen steht in den Negativvorgaben. Er ist eine Webebene (GSAP
+MotionPath) über dem Video. Nur so funktioniert der Rückwärtsflug beim
+Auftauchen, ohne dass ein Charakter rückwärts schwimmt.
+
+## Keine OUT-Videos
+
+Auftauchen = das IN-Video rückwärts. Fertig umgekehrte Datei via ffmpeg,
+nicht rückwärts abgespielt im Browser.

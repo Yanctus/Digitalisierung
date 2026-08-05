@@ -1,0 +1,60 @@
+{
+  "_zweck": "Ein Eintrag je kostenpflichtiger Generierung. Vor jeder neuen Generation wird hier gesucht, ob es das Ergebnis schon gibt.",
+  "_pflichtfelder": [
+    "id", "datei", "prompt_hash", "prompt_datei", "modell", "modell_version",
+    "parameter", "seed", "startframe", "endframe", "monid_job_id", "kosten_usd",
+    "pruefergebnis", "freigabe"
+  ],
+
+  "bestand_vor_dieser_produktionsserie": [
+    {
+      "id": "alt-01",
+      "datei": "assets/scroll-world/dive/raw/welt.mp4",
+      "beschreibung": "Isometrische Unterwasserwelt, stehende Kamera, 4 Orte angedeutet",
+      "modell": "bytedance/seedance-2.0",
+      "parameter": { "resolution": "480p", "ratio": "16:9", "duration": 10 },
+      "seed": 28499,
+      "kosten_usd": 0.706006,
+      "pruefergebnis": "Kamera steht (27,5 dB erster gegen letzten Frame). Zeigt Tangwald, Kuppelhalle, Wrack, Schlot.",
+      "wiederverwendbar_als": "Stilreferenz und moeglicher Ausgangspunkt fuer 00_WORLD_MASTER — aber die neue Welt hat 5 benannte Orte und eine andere Architektur",
+      "freigabe": "prototyp"
+    },
+    {
+      "id": "alt-02",
+      "datei": "assets/scroll-world/dive/raw/tauchgang.mp4",
+      "beschreibung": "Einflug Welt -> Kuppelhalle, 5 s",
+      "modell": "bytedance/seedance-2.0",
+      "parameter": { "resolution": "480p", "ratio": "16:9", "duration": 5 },
+      "seed": 21761,
+      "kosten_usd": 0.354466,
+      "pruefergebnis": "Startnaht 35,3 dB, Endnaht 24,2 dB. Rueckwaerts als auftauchen.mp4 nutzbar.",
+      "wiederverwendbar_als": "Beleg, dass die Einflug-Mechanik traegt. Nicht fuer das Wrack verwendbar.",
+      "freigabe": "prototyp"
+    },
+    {
+      "id": "alt-03",
+      "datei": "assets/scroll-world/dive/raw/halle-loop.mp4",
+      "beschreibung": "Kuppelhalle, loop-nativ (first_frame == last_frame)",
+      "modell": "bytedance/seedance-2.0",
+      "parameter": { "resolution": "480p", "ratio": "16:9", "duration": 10 },
+      "seed": 8209,
+      "kosten_usd": 0.706006,
+      "pruefergebnis": "Anfang gegen Ende 37,7 dB — deutlich besser als nachtraeglich geschleift (30,8 dB).",
+      "wiederverwendbar_als": "Methodenbeleg fuer loop-native Renders.",
+      "freigabe": "prototyp"
+    },
+    {
+      "id": "alt-04",
+      "datei": "assets/scroll-world/dive/raw/raum.mp4",
+      "beschreibung": "Korallenhalle, stehende Kamera, erster Versuch",
+      "modell": "bytedance/seedance-2.0",
+      "parameter": { "resolution": "480p", "ratio": "16:9", "duration": 10 },
+      "seed": 28981,
+      "kosten_usd": 0.706006,
+      "pruefergebnis": "Kamera steht (30,8 dB). Von alt-03 abgeloest.",
+      "freigabe": "abgeloest"
+    }
+  ],
+
+  "produktionsserie_riff": []
+}
