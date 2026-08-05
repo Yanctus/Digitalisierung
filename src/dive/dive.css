@@ -254,6 +254,37 @@
   height: 100vh;
   height: 100dvh;
 }
+
+/* ---------- Gewöhnung ans Dunkel ----------
+   Wo der Einflug im Schwarzen endet, darf der Raum nicht plötzlich dastehen.
+   Diese Schicht liegt über Bild UND Überschrift und weicht langsam: erst hält
+   die Dunkelheit noch kurz, dann wird es stetig heller. Die Ebene selbst
+   blendet dafür schnell auf, sonst überlagern sich zwei Blenden. */
+.d-room__adapt {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: #000;
+  pointer-events: none;
+  opacity: 0;
+}
+.d-root.is-room .d-room__adapt {
+  animation: dAdapt 2.1s linear forwards;
+}
+@keyframes dAdapt {
+  0% { opacity: 1; }
+  18% { opacity: 0.94; }
+  100% { opacity: 0; }
+}
+.d-root.is-room .d-layer--room {
+  transition-duration: 0.25s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .d-root.is-room .d-room__adapt {
+    animation: none;
+  }
+}
 /* Absolut zum Scrollinhalt, nicht zum klebenden Kopf — dadurch wandern beide
    beim Weiterlesen nach oben aus dem Bild. */
 .d-room__head {

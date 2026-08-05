@@ -57,6 +57,13 @@ export type Place = {
   rise?: string
   room?: string
   poster?: string
+  /**
+   * Der Einflug endet im Schwarzen (weil er durch eine Öffnung führt). Dann
+   * blendet der Raum aus der Dunkelheit auf, statt einfach dazustehen — wie
+   * Augen, die sich gewöhnen. Bei Orten, deren Einflug auf einem hellen Bild
+   * endet, wäre das falsch: Es ginge hell → schwarz → hell.
+   */
+  darkEntry?: boolean
   hotspots?: DiveHotspot[]
   /** Der Text, der unter der Schleife liegt, wenn man im Raum weiterscrollt. */
   page?: { lead: string; blocks: { title: string; body: string }[] }
@@ -198,6 +205,8 @@ export const PLACES: Place[] = [
     rise: '/dive/vid/wrack-out.mp4',
     room: '/dive/vid/wrack.mp4',
     poster: '/dive/still/wrack.jpg',
+    // Der Einflug führt durch das Loch im Rumpf und endet im Dunkeln.
+    darkEntry: true,
     hotspots: [
       {
         id: 'kette',

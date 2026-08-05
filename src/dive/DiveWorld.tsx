@@ -422,6 +422,11 @@ export default function DiveWorld() {
             </div>
             <div className="d-vignette" aria-hidden="true" />
 
+            {/* Gewöhnung ans Dunkel. Nur wo der Einflug im Schwarzen endet:
+                Der Raum steht nicht plötzlich da, er wird langsam und stetig
+                heller — kurz hält die Dunkelheit noch, dann kommt das Bild. */}
+            {place.darkEntry && <div className="d-room__adapt" aria-hidden="true" />}
+
             </div>
 
             {/* Überschrift und Hinweis liegen bewusst NICHT im klebenden Kopf:
