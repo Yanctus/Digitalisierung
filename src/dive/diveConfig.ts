@@ -31,6 +31,17 @@ export type DiveHotspot = {
   label: string
   title: string
   body: string
+  /**
+   * Mitschwingen mit dem Bild.
+   *
+   * Sitzt ein Punkt auf etwas Bewegtem — einem Tanghalm, einer Kette —, dann
+   * klebt er ohne das daneben. Es gibt keine Trackingdaten in einem fertigen
+   * Video, aber die Schleife ist **periodisch**: Sie beginnt und endet auf
+   * demselben Bild. Deshalb genügt eine Sinusbewegung, die an die Laufzeit der
+   * Schleife gekoppelt ist. Eine Periode je Durchlauf, Amplitude in
+   * Prozentpunkten, `phase` in Umdrehungen (0..1) zum Ausrichten.
+   */
+  sway?: { x?: number; y?: number; phase?: number; periods?: number }
 }
 
 export type Place = {
@@ -150,6 +161,8 @@ export const PLACES: Place[] = [
         id: 'gasse',
         x: 47,
         y: 40,
+        // Sitzt zwischen den wiegenden Halmen und schwingt deshalb mit.
+        sway: { x: 1.4, y: 0.6, phase: 0.1 },
         label: 'Die Gasse',
         title: 'Wege entstehen dort, wo jemand oft geht.',
         body: 'Diese Gasse hat niemand geplant, sie ist entstanden. Genauso funktionieren gewachsene Abläufe — und genau deshalb verrät die tatsächlich benutzte Route mehr über ein Unternehmen als jedes Prozessdiagramm.',

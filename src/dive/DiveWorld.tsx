@@ -31,6 +31,7 @@ export default function DiveWorld() {
   const riseRef = useRef<HTMLVideoElement>(null)
   const worldRef = useRef<HTMLVideoElement>(null)
   const roomRef = useRef<HTMLVideoElement>(null)
+  const roomLayerRef = useRef<HTMLDivElement>(null)
 
   /** Schleifen müssen laufen. Autoplay, Hintergrund-Tab und Sparmodus können
       sie anhalten — deshalb bei jedem dieser Anlässe neu anstoßen. */
@@ -140,6 +141,47 @@ export default function DiveWorld() {
       window.setTimeout(go, 400)
     }
   }, [])
+
+  /**
+   * Klickpunkte schwingen mit dem Bild mit.
+   *
+   * Ein fertiges Video liefert keine Trackingdaten. Aber die Schleife ist
+   * periodisch — sie beginnt und endet auf demselben Bild —, also lässt sich
+   * die Bewegung als Sinus nachbilden, der an `currentTime` gekoppelt ist.
+   * Solange die Amplitude klein bleibt, klebt der Punkt am Halm statt daneben.
+   *
+   * Geschrieben wird direkt auf die Elemente, nicht über React: Ein
+   * Zustandswechsel je Bild bei 60 Hz würde die ganze Ebene neu rendern.
+   */
+  useEffect(() => {
+    if (phase !== 'room') return
+    const v = roomRef.current
+    const root = roomLayerRef.current
+    if (!v || !root) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    let raf = 0
+    const step = () => {
+      const dur = v.duration || 0
+      if (dur > 0) {
+        const t = (v.currentTime / dur) * Math.PI * 2
+        root.querySelectorAll<HTMLElement>('.t-spot[data-sway-x]').forEach((el) => {
+          const ax = parseFloat(el.dataset.swayX || '0')
+          const ay = parseFloat(el.dataset.swayY || '0')
+          if (!ax && !ay) return
+          const ph = parseFloat(el.dataset.swayPhase || '0') * Math.PI * 2
+          const k = parseFloat(el.dataset.swayPeriods || '1')
+          const bx = parseFloat(el.dataset.baseX || '0')
+          const by = parseFloat(el.dataset.baseY || '0')
+          el.style.left = (bx + Math.sin(t * k + ph) * ax).toFixed(3) + '%'
+          el.style.top = (by + Math.cos(t * k + ph) * ay).toFixed(3) + '%'
+        })
+      }
+      raf = requestAnimationFrame(step)
+    }
+    raf = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(raf)
+  }, [phase, place])
 
   /**
    * Beim Betreten der Halle die Schleife auf Frame 0 setzen.
@@ -329,7 +371,7 @@ export default function DiveWorld() {
           (sticky), und wer weiterscrollt, zieht den Text darüber. Die
           Bedienelemente liegen bewusst AUSSERHALB des Scrollbereichs, sonst
           wandern sie beim Scrollen mit weg. */}
-      <div className="d-layer d-layer--room">
+      <div className="d-layer d-layer--room" ref={roomLayerRef}>
         {place?.room && (
           <div className="d-room">
             <div className="d-room__hero">
@@ -354,6 +396,14 @@ export default function DiveWorld() {
                   type="button"
                   className={'t-spot' + (openSpot === h.id ? ' is-open' : '')}
                   style={{ left: `${h.x}%`, top: `${h.y}%` }}
+                  /* Die Schwingung schreibt die rAF-Schleife direkt auf das
+                     Element. React bleibt aus der 60-Hz-Schleife heraus. */
+                  data-sway-x={h.sway?.x ?? 0}
+                  data-sway-y={h.sway?.y ?? 0}
+                  data-sway-phase={h.sway?.phase ?? 0}
+                  data-sway-periods={h.sway?.periods ?? 1}
+                  data-base-x={h.x}
+                  data-base-y={h.y}
                   onClick={() => setOpenSpot(openSpot === h.id ? null : h.id)}
                   aria-expanded={openSpot === h.id}
                 >
@@ -410,13 +460,21 @@ export default function DiveWorld() {
       {/* Bedienelemente des Raums — fest, außerhalb des Scrollbereichs */}
       {shown === 'room' && place && (
         <>
-          <button type="button" className="t-cham__close d-room__exit" onClick={surface}>
-            <span className="t-cham__closeIcon" aria-hidden="true">
-              <i />
-              <i />
+          {/* Die Navigation des Ortes. Unten mittig statt oben rechts: Dort
+              sucht man sie, dort verdeckt sie nichts, und sie bleibt beim
+              Weiterlesen stehen. */}
+          <nav className="d-nav" aria-label={place.name}>
+            <button type="button" className="d-nav__up" onClick={surface}>
+              <span className="d-nav__arrow" aria-hidden="true" />
+              Auftauchen
+            </button>
+            <span className="d-nav__sep" aria-hidden="true" />
+            <span className="d-nav__here">{place.name}</span>
+            <span className="d-nav__count">
+              {PLACES.filter((x) => x.dive).findIndex((x) => x.id === place.id) + 1}
+              <em>/{PLACES.filter((x) => x.dive).length}</em>
             </span>
-            Auftauchen
-          </button>
+          </nav>
 
           <aside className={'t-panel' + (spot ? ' is-open' : '')} aria-hidden={!spot}>
             {spot && (

@@ -42,3 +42,24 @@ Auftauchen, ohne dass ein Charakter rückwärts schwimmt.
 
 Auftauchen = das IN-Video rückwärts. Fertig umgekehrte Datei via ffmpeg,
 nicht rückwärts abgespielt im Browser.
+
+## Jeder Ort braucht sein eigenes Leitmotiv
+
+Real passiert: Kuppelhalle und Tangwald bekamen beide „a single warm orange
+lantern" in die Mitte, weil die Szenenbeschreibung kopiert wurde. Nebeneinander
+wirkt das repetitiv — es sieht aus wie derselbe Raum in anderer Farbe.
+
+**Vergeben:**
+
+| Ort | Leitmotiv in der Bildmitte |
+|---|---|
+| Kuppelhalle | Laterne auf dem Boden |
+| Tangwald | Laterne auf dem Boden ⚠ Dublette |
+
+**Frei zu vergeben** (Vorschläge): eine glühende Spalte im Rumpf, ein
+Lichtschacht von oben, ein einzelnes großes Zahnrad, ein Schwarm stehender
+Lichtpunkte, eine offene Truhe, eine aufsteigende Blasensäule.
+
+**Regel:** Vor jedem neuen Szenenblock in diese Tabelle schauen. Das Motiv in
+der Bildmitte darf sich nicht wiederholen — es ist das, was der Besucher als
+„der Raum" erinnert.
