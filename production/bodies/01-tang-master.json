@@ -1,0 +1,8 @@
+{
+  "model": "image-01",
+  "prompt": "Stylised painterly 3D illustration with the graphic language of a hand-painted game world - bold silhouettes, simplified sculpted forms, soft painterly surfaces without fine photoreal texture detail, and strong contrast between deep shadow and glowing accent light. Deep violet and midnight-blue water throughout, structures and living light in royal and electric violet. Warm orange reserved for lantern light, backlight, rim light and highlights - present but never dominant. Underwater world: slowly drifting particles, soft god rays falling from far above, volumetric haze, soft bloom, shallow depth of field, subtle film grain, calm slightly surreal atmosphere. Organic grown surfaces meet digital light structures. No text, no letters, no logos, no signage. Standing deep inside a forest of giant kelp on the sea floor, looking straight ahead down a narrow lane between the stems. Towering kelp stalks rise close on the left and on the right, their broad blades drifting slowly. Between them the lane opens into deeper violet water. Old sunken crates and stone tablets lie half buried in the sand at the foot of the stems, each carrying its own small violet glow, none of them connected to any other. A single warm orange lantern rests low in the middle of the lane.",
+  "aspect_ratio": "16:9",
+  "n": 1,
+  "prompt_optimizer": false,
+  "response_format": "url"
+}

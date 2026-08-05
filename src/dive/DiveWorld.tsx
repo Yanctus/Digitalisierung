@@ -63,6 +63,11 @@ export default function DiveWorld() {
   }, [phase])
 
   const failsafe = useRef(0)
+  /** Der aktuelle Ort für `surface`, das ohne Neubindung darauf zugreifen muss. */
+  const placeRefForRise = useRef<Place | null>(null)
+  useEffect(() => {
+    placeRefForRise.current = place
+  }, [place])
 
   /**
    * Klick auf einen Ort — die Kamera fährt hinein.
@@ -94,11 +99,10 @@ export default function DiveWorld() {
       setPhase('room')
       return
     }
-    v.currentTime = 0
     /**
-     * Drei Wege können den Tauchgang auslösen — `playing`, die 400-ms-Notbremse
-     * und die Ablehnung von `play()`. Ohne diesen Riegel liefen zwei davon:
-     * die Ablehnung schaltete sofort in den Raum, der Timer kurz darauf in den
+     * Drei Wege können den Tauchgang auslösen — `playing`, die Notbremse und
+     * die Ablehnung von `play()`. Ohne diesen Riegel liefen zwei davon: die
+     * Ablehnung schaltete sofort in den Raum, der Timer kurz darauf in den
      * Tauchgang. Ergebnis war eine Seite, die erst ankommt und dann losfliegt.
      */
     let claimed = false
@@ -109,10 +113,32 @@ export default function DiveWorld() {
     }
     const go = claim(start)
     v.addEventListener('playing', go, { once: true })
-    // Falls `playing` ausbleibt, nicht ewig auf der Welt stehen bleiben.
-    window.setTimeout(go, 400)
-    const pr = v.play()
-    if (pr && pr.catch) pr.catch(claim(() => setPhase('room')))
+
+    const play = () => {
+      v.currentTime = 0
+      const pr = v.play()
+      if (pr && pr.catch) pr.catch(claim(() => setPhase('room')))
+    }
+
+    /**
+     * Die Quelle direkt setzen, nicht auf React warten: `place` wird erst im
+     * nächsten Render zum `src`-Attribut, `play()` liefe aber sofort und
+     * spielte den Clip des vorigen Ortes.
+     *
+     * Danach MUSS auf `loadeddata` gewartet werden. `load()` bricht ein direkt
+     * folgendes `play()` ab — real passiert: der Tauchgang wurde abgelehnt und
+     * die Seite sprang ohne Fahrt in den Raum.
+     */
+    if (v.getAttribute('src') !== p.dive) {
+      v.setAttribute('src', p.dive)
+      v.addEventListener('loadeddata', play, { once: true })
+      v.load()
+      // Falls die Datei hakt, nicht ewig in der Welt stehen bleiben.
+      window.setTimeout(go, 2500)
+    } else {
+      play()
+      window.setTimeout(go, 400)
+    }
   }, [])
 
   /**
@@ -153,12 +179,12 @@ export default function DiveWorld() {
     setOpenSpot(null)
 
     const v = riseRef.current
-    if (!v) {
+    const rise = placeRefForRise.current?.rise
+    if (!v || !rise) {
       setPhase('world')
       window.setTimeout(() => setPlace(null), 700)
       return
     }
-    v.currentTime = 0
     let started = false
     const go = () => {
       if (started) return
@@ -171,13 +197,27 @@ export default function DiveWorld() {
       }, ((v.duration || 5) + 1) * 1000)
     }
     v.addEventListener('playing', go, { once: true })
-    window.setTimeout(go, 400)
-    const pr = v.play()
-    if (pr && pr.catch)
-      pr.catch(() => {
-        setPhase('world')
-        window.setTimeout(() => setPlace(null), 700)
-      })
+
+    const play = () => {
+      v.currentTime = 0
+      const pr = v.play()
+      if (pr && pr.catch)
+        pr.catch(() => {
+          setPhase('world')
+          window.setTimeout(() => setPlace(null), 700)
+        })
+    }
+    // Wie beim Eintauchen: erst laden lassen, sonst bricht `load()` das
+    // `play()` ab und man landet ohne Fahrt wieder in der Welt.
+    if (v.getAttribute('src') !== rise) {
+      v.setAttribute('src', rise)
+      v.addEventListener('loadeddata', play, { once: true })
+      v.load()
+      window.setTimeout(go, 2500)
+    } else {
+      play()
+      window.setTimeout(go, 400)
+    }
   }, [])
 
   useEffect(() => {
@@ -254,7 +294,9 @@ export default function DiveWorld() {
         <video
           ref={diveRef}
           className="d-video d-video--full"
-          src={PLACES[0].dive}
+          /* Der Clip des angeklickten Ortes, nicht ein fester — sonst fliegt
+             man ab dem zweiten Ort immer in denselben Raum. */
+          src={place?.dive}
           muted
           playsInline
           preload="auto"
@@ -270,7 +312,7 @@ export default function DiveWorld() {
         <video
           ref={riseRef}
           className="d-video d-video--full"
-          src={PLACES[0].rise}
+          src={place?.rise}
           muted
           playsInline
           preload="auto"

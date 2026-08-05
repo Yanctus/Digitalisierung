@@ -125,6 +125,53 @@ export const PLACES: Place[] = [
     y: 30,
     name: 'Der Tangwald',
     claim: 'Informationen sind vorhanden. Aber nicht dort, wo sie gebraucht werden.',
+    dive: '/dive/vid/tang-in.mp4',
+    rise: '/dive/vid/tang-out.mp4',
+    room: '/dive/vid/tangwald.mp4',
+    poster: '/dive/still/tangwald.jpg',
+    hotspots: [
+      {
+        id: 'kiste',
+        x: 63,
+        y: 84,
+        label: 'Die Kiste',
+        title: 'Jede Kiste hat mal jemand sinnvoll hingestellt.',
+        body: 'Was heute im Weg liegt, war einmal die Lösung für ein echtes Problem. Deshalb wird hier nichts weggeräumt, bevor nicht klar ist, wofür es einmal da war — und ob dieser Grund noch gilt.',
+      },
+      {
+        id: 'laterne',
+        x: 50,
+        y: 88,
+        label: 'Die Laterne',
+        title: 'Man findet nur, wovon man weiß, dass es existiert.',
+        body: 'Die häufigste Antwort auf „wo liegt das?" ist nicht „weiß ich nicht", sondern „das haben wir doch gar nicht". Der erste Schritt ist deshalb kein Suchsystem, sondern eine Liste dessen, was überhaupt da ist.',
+      },
+      {
+        id: 'gasse',
+        x: 47,
+        y: 40,
+        label: 'Die Gasse',
+        title: 'Wege entstehen dort, wo jemand oft geht.',
+        body: 'Diese Gasse hat niemand geplant, sie ist entstanden. Genauso funktionieren gewachsene Abläufe — und genau deshalb verrät die tatsächlich benutzte Route mehr über ein Unternehmen als jedes Prozessdiagramm.',
+      },
+    ],
+    page: {
+      lead: 'In gewachsenen Betrieben ist Wissen selten verloren. Es ist verstreut: im Ordner, im Postfach, im Kopf von drei Leuten — und in der einen Excel-Liste, die jemand seit Jahren nebenbei pflegt.',
+      blocks: [
+        {
+          title: 'Warum Suchen so teuer ist',
+          body: 'Nicht die Minuten am Bildschirm kosten. Teuer wird die Rückfrage, die jemand anderen aus seiner Arbeit reißt, und die Entscheidung, die auf einem Stand von vorgestern getroffen wird, weil der aktuelle nicht auffindbar war.',
+        },
+        {
+          title: 'Was zuerst passiert',
+          body: 'Eine Bestandsaufnahme dessen, was tatsächlich existiert und wer es führt. Ohne Werkzeugentscheidung. In den meisten Häusern ist allein diese Liste schon die halbe Wirkung — weil zum ersten Mal alle dasselbe sehen.',
+        },
+        {
+          title: 'Was am Ende bleibt',
+          body: 'Ein Ort je Sache, und eine Person, die dafür geradesteht. Kein neues System, das neben die alten tritt, sondern eine Entscheidung darüber, was wo hingehört — und die Disziplin, sie einzuhalten.',
+        },
+      ],
+    },
   },
   {
     id: 'wrack',

@@ -40,7 +40,7 @@ def scene(slug: str) -> str:
 
 
 def build_image(slug: str) -> dict:
-    style = block("IMAGE_STYLE")
+    style = block("WORLD_STYLE")
     # Der Rochen ist das einzige Asset, das eine Kreatur zeigen darf.
     if slug.startswith("rochen"):
         style = style.replace(", no creatures or fish", "")
@@ -64,11 +64,10 @@ def build_image(slug: str) -> dict:
 
 def build_video(slug: str, first_url: str = "", last_url: str = "") -> dict:
     parts = [
-        block("STYLE_BLOCK"),
+        block("WORLD_STYLE"),
         f"SCENE: {scene(slug)}",
         block("FRAME_CONSTRAINTS") if slug.endswith("-in") else block("CAMERA_LOCK"),
         block("KOMPOSITIONSREGEL"),
-        block("NEGATIVE_CONSTRAINTS"),
     ]
     prompt = " ".join(p.replace("\n", " ") for p in parts)
     if len(prompt) > 3800:

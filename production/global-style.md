@@ -1,10 +1,57 @@
 # GLOBAL STYLE — unveränderlich
 
 **Diese Datei wird zwischen Generierungen nicht verändert.** Nicht umformuliert,
-nicht „verbessert", nicht gekürzt. Jede Änderung ist eine bewusste Entscheidung
-und braucht eine neue Versionsnummer sowie einen Eintrag im Ledger.
+nicht „verbessert", nicht gekürzt.
 
-Version: `1.3` · angelegt 05.08.2026 · zuletzt geändert 05.08.2026
+Version: `2.0` · gültig ab 05.08.2026
+
+---
+
+## ⚠ Welcher Stil gilt
+
+**Es gilt `WORLD_STYLE` unten.** Das ist wortgleich der Block, mit dem die
+laufende Welt (`welt.mp4`) und die Kuppelhalle (`halle-loop.mp4`) gerendert
+wurden. Jeder neue Ort muss ihn benutzen, sonst passt er neben den
+bestehenden nicht.
+
+Die Fassungen **1.1 bis 1.3** weiter unten gehören zur **verworfenen**
+Master-Bild-Runde vom 05.08.2026 (reich ornamental, warmes Gegenlicht,
+Sonnenuntergang von unten). Sie sind als Lehrmaterial aufgehoben — die
+Erkenntnisse darin gelten weiter —, aber **nicht als Stilvorgabe**.
+
+Die teuerste Lehre daraus: Der Stilblock war auf v1.3 gewandert, während die
+produktive Welt weiter auf dem alten Block lief. Wäre das unbemerkt geblieben,
+hätte der erste neue Ort sichtbar nicht dazugepasst.
+
+## WORLD_STYLE (verbindlich, wortgleich in jeden Prompt)
+
+```
+Stylised painterly 3D illustration with the graphic language of a hand-painted game world - bold silhouettes, simplified sculpted forms, soft painterly surfaces without fine photoreal texture detail, and strong contrast between deep shadow and glowing accent light. Deep violet and midnight-blue water throughout, structures and living light in royal and electric violet. Warm orange reserved for lantern light, backlight, rim light and highlights - present but never dominant. Underwater world: slowly drifting particles, soft god rays falling from far above, volumetric haze, soft bloom, shallow depth of field, subtle film grain, calm slightly surreal atmosphere. Organic grown surfaces meet digital light structures. No text, no letters, no logos, no signage.
+```
+
+## CAMERA_LOCK (für Räume und Schleifen)
+
+```
+CAMERA: the camera is locked on a tripod for the entire shot - no pan, no tilt, no dolly, no zoom, no orbit, no handheld drift. The framing of the last frame is identical to the framing of the first frame. Only the contents of the scene move, and because everything is underwater it drifts, sways and floats without any clear direction of travel.
+```
+
+## FRAME_CONSTRAINTS (für Einflüge)
+
+```
+Single continuous camera move, no cuts. The shot begins exactly on the supplied first frame and ends exactly on the supplied last frame, matching its framing, its architecture and its light. Nothing new is built along the way; the camera only travels through what is already there.
+```
+
+## KOMPOSITIONSREGEL
+
+```
+COMPOSITION: the important objects sit in the central and lower middle band of the frame; the upper left quarter and the right third stay calm and uncluttered.
+```
+
+Grund: Der Kopftext liegt oben links, das Textpanel deckt das rechte Drittel.
+
+---
+
+# Archiv — verworfene Fassungen 1.0 bis 1.3
 
 **Änderung 1.2 → 1.3 (Fehlerkorrektur, real zweimal passiert):** 1.2 verlangte
 „a warm orange glow far in the background **like a sunset seen through water**".

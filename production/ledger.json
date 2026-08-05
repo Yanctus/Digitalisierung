@@ -175,8 +175,8 @@
       "freigabe": "Welt vorgeschlagen, Wrack offen"
     }
   ],
-  "_stand": "Alle neu generierten Weltmaster verworfen. Es gilt die bereits gerenderte Welt (assets/scroll-world/dive/raw/welt.mp4). Naechste Schritte: die vier weiteren Orte entwerfen. Videos fuer neue Orte nicht gestartet.",
-  "_ausgegeben_bisher_usd": 0.049,
+  "_stand": "Tangwald fertig und eingebaut. Zwei Orte begehbar: Kuppelhalle und Tangwald. Offen: Wrack, Schlot, Rochen.",
+  "_ausgegeben_bisher_usd": 1.113,
   "_naechster_vorschlag": {
     "was": "nur 02-wrack-master neu, 1 Bild",
     "kosten_usd": 0.0035,
@@ -219,6 +219,63 @@
       "pruefergebnis": "Ganze Insel im Bild, Dreiviertelblick von oben. Tiefe, Waerme und Farbe von Referenzbild 2. Tangwald links, Kuppelhalle mit leuchtenden Fenstern Mitte, Schiffsmasten rechts dahinter, Spire oben, orange Blueten verstreut, violettes Licht faellt von der Unterseite. Schlucht und Observatorium nur angedeutet.",
       "besonderheit": "CLI stuerzte beim Empfangen ab ('Unexpected token <'), Lauf war serverseitig fertig und bezahlt. Ueber `monid runs get` geborgen statt neu gerendert.",
       "freigabe": "VERWORFEN — Auftraggeber bleibt bei der bestehenden Welt (05.08.2026)"
+    }
+  ],
+  "_phase_4_tangwald": [
+    {
+      "id": "tang-master",
+      "datei": "production/masters/01-tang-master.png",
+      "prompt_hash": "1b0720ee75e2",
+      "modell": "minimax/image-01",
+      "parameter": {
+        "aspect_ratio": "16:9",
+        "n": 1,
+        "prompt_optimizer": false
+      },
+      "kosten_usd": 0.0035,
+      "pruefergebnis": "Auf Anhieb: man steht im Wald, Halme dicht links und rechts, Gasse nach vorn, Kisten und Laternen im Sand. Farblich passend zur bestehenden Welt.",
+      "freigabe": "eingefroren als Frame-Lock"
+    },
+    {
+      "id": "tang-in",
+      "datei": "public/dive/vid/tang-in.mp4",
+      "prompt_hash": "f4d24dec2f5a",
+      "modell": "bytedance/seedance-2.0",
+      "parameter": {
+        "resolution": "480p",
+        "ratio": "16:9",
+        "duration": 5
+      },
+      "seed": 50994,
+      "kosten_usd": 0.354466,
+      "startframe": "welt.mp4 @5s",
+      "endframe": "01-tang-master.png",
+      "pruefergebnis": "Kamera rast zwischen den Halmen hindurch, Bewegungsunschaerfe an den Raendern, ruhiges Ende. Endnaht roh 36,2 dB, nach dem Backen 37,6 dB.",
+      "freigabe": "im Einsatz"
+    },
+    {
+      "id": "tang-loop",
+      "datei": "public/dive/vid/tangwald.mp4",
+      "prompt_hash": "a73a521fbc4c",
+      "modell": "bytedance/seedance-2.0",
+      "parameter": {
+        "resolution": "480p",
+        "ratio": "16:9",
+        "duration": 10
+      },
+      "seed": 42722,
+      "kosten_usd": 0.706006,
+      "startframe": "01-tang-master.png",
+      "endframe": "01-tang-master.png",
+      "pruefergebnis": "Loop-nativ. Anfang gegen Ende roh 38,5 dB, nach dem Backen 39,3 dB.",
+      "freigabe": "im Einsatz"
+    },
+    {
+      "id": "tang-out",
+      "datei": "public/dive/vid/tang-out.mp4",
+      "kosten_usd": 0.0,
+      "herkunft": "tang-in.mp4 rueckwaerts (ffmpeg)",
+      "freigabe": "im Einsatz"
     }
   ]
 }
