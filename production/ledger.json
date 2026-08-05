@@ -92,6 +92,36 @@
     }
   ],
 
-  "_stand": "Retry-Kontingent fuer die Bildphase verbraucht (1 von 1). Keine weitere kostenpflichtige Bildgenerierung ohne neue Freigabe. Videos noch nicht gestartet.",
-  "_ausgegeben_bisher_usd": 0.021
+  "_phase_2_nach_referenzbildern": [
+    {
+      "id": "img-v3",
+      "datei": "production/masters/v3-referenz/*.png",
+      "beschreibung": "Erste Fassung nach den Referenzbildern des Auftraggebers. Stilblock auf v1.1 gehoben (Detailstufe umgekehrt: reich und ornamental statt vereinfacht).",
+      "prompt_hash": ["69b3a73b6992", "9b78e437172e"],
+      "modell": "minimax/image-01",
+      "parameter": { "aspect_ratio": "16:9", "n": 1, "prompt_optimizer": false },
+      "kosten_usd": 0.007,
+      "pruefergebnis": "Deutlich naeher an der Referenz. Zwei Fehler: (a) Welt zu flach fotografiert, Landschaft statt Karte von oben; (b) Wrack: das Orange wieder als dicke Leuchtschlaeuche an Waenden und Boden. Ursache (b) ist ein Regelverstoss von mir — im Prompt stand 'never a thick tube', also eine VERNEINUNG. Die Projektregel lautet seit dem Libellenfilm 'positiv formulieren, nie verneinen'.",
+      "freigabe": "verworfen"
+    },
+    {
+      "id": "img-v4",
+      "datei": "production/masters/v4-positiv/*.png",
+      "beschreibung": "Technisch begruendeter Retry: Verneinung durch positive Beschreibung ersetzt ('hairline traceries, thin as a scratch, like veins in a leaf'), Blickwinkel geschaerft ('45 degree isometric looking down, reads like a map').",
+      "prompt_hash": ["ddd874a5be97", "c6a3cce958f3"],
+      "modell": "minimax/image-01",
+      "parameter": { "aspect_ratio": "16:9", "n": 1, "prompt_optimizer": false },
+      "kosten_usd": 0.007,
+      "pruefergebnis": "WELT: sitzt. Karte von oben, Plateaus auf verschiedenen Hoehen, Bruecken mit orangem Pfad, Kathedralkuppel, Segelschiff, Spire, Korallen, Quallen, violette Wasserfaelle. WRACK: Architektur, Lichtschacht, Quallen, Bullaugen und Messingpulte sitzen — aber das Orange am Boden ist weiterhin zwei durchgehende Leuchtschienen statt feiner Adern. Narrativ relevant: das Kapitel soll UNVERBUNDEN beginnen, zwei durchgehende Schienen sind bereits verbunden.",
+      "freigabe": "Welt vorgeschlagen, Wrack offen"
+    }
+  ],
+
+  "_stand": "Bildphase 2: Retry verbraucht (1 von 1). Welt v4 als Master vorgeschlagen. Wrack v4 hat einen benannten Restfehler (Bodenschienen). KEINE weitere kostenpflichtige Generierung ohne neue Freigabe. Videos nicht gestartet.",
+  "_ausgegeben_bisher_usd": 0.035,
+  "_naechster_vorschlag": {
+    "was": "nur 02-wrack-master neu, 1 Bild",
+    "kosten_usd": 0.0035,
+    "aenderung": "Adern vom Boden auf Maschinen und Waende verlegen, Boden positiv als dunkel und nass ohne eigenes Licht beschreiben. Grund: der Boden hat starke lineare Plattenfugen, denen das Modell folgt — daraus werden zwangslaeufig Schienen."
+  }
 }

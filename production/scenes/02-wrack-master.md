@@ -2,9 +2,13 @@
 
 Verbindliches Innenraum-Masterbild. Dreifach verwendet: Endframe von
 `02_WRACK_IN`, Poster des Kapitels, Startframe von `02_WRACK_CHAPTER`.
-Stil: `IMAGE_STYLE` aus global-style.md.
+Stil: `IMAGE_STYLE` (v1.1) aus global-style.md.
+
+Nach Referenzbild des Auftraggebers vom 05.08.2026: **Maschinenraum**, nicht
+leerer Holzladeraum. Bullaugen, Messingskalen, Nietenblech, Lichtschacht von
+oben, orange Adern im nassen Boden.
 
 ## SCENE_DESCRIPTION
 ```
-Inside the hold of a great sunken wooden ship, seen straight on down its length. Heavy curved wooden ribs arch overhead, iron fittings and old crates sit along the sides, chains hang still in the water. Each object carries its own weak violet glow and none of them are connected to one another yet. A single warm orange lantern rests low on the centre of the deck. The important objects sit in the central and lower middle band of the frame; the upper left quarter and the right third stay calm and uncluttered.
+Inside the vast hold of a sunken ship, one-point perspective down its length. A huge arched ribbed ceiling with a broken opening above lets blue light shafts fall through. Round portholes along both walls show deep water outside. On the left a console of round brass gauges, on the right a massive riveted engine drum. Iron staircases lead up at the back. Fine hairline traceries of warm orange, thin as a scratch, wander across the wet floor plates and along the seams of the metal like veins in a leaf. Small round brass lamps glow at the console; the walls are lit by the blue portholes alone. Violet and magenta corals grow over the metal. Every object glows on its own, none are connected yet.
 ```

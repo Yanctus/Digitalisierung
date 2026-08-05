@@ -1,9 +1,13 @@
 # 00_WORLD_MASTER — die Hauptwelt
 
 Festes isometrisches Masterbild. Startreferenz **aller** IN-Videos.
-Stil: `IMAGE_STYLE` aus global-style.md.
+Stil: `IMAGE_STYLE` (v1.1) aus global-style.md.
+
+Nach Referenzbild des Auftraggebers vom 05.08.2026: **mehrere getrennte
+schwebende Plateaus** auf verschiedenen Höhen, nicht ein einzelnes. Ein
+durchgehender oranger Pfad verbindet sie. Quallen als Umgebungsleben.
 
 ## SCENE_DESCRIPTION
 ```
-A whole underwater reef city on one great floating reef plateau, seen from outside at a high isometric three-quarter angle, tilt-shift miniature look, surrounded by deep dark open water. Five distinct places are clearly separated and readable: on the left a domed archive reef of glowing cells, on the right a great sunken wooden ship lying along the edge, in the front centre a wide hall of arches, behind it a garden terrace of soft glowing blooms, and at the top a tall slender observatory spire with one beam of light rising from it. Warm orange light flows along the paths between all five places like veins. The whole city reads clearly at a glance.
+An underwater city on several separate floating rock plateaus at different heights, seen far above at a 45 degree isometric angle looking down, so the whole city fits in frame and reads like a map, surrounded by deep dark navy water fading to black at the edges. One glowing orange path winds across all the plateaus and links them. On the left an ornate domed cathedral of filigree stonework with small lit windows. On the right a large sunken sailing ship with masts on its own plateau. In the centre a long arcaded hall, behind it a terrace of glowing blooms, and a slender spire with a thin beam of light. Purple coral trees cover every plateau, violet waterfalls fall from below.
 ```
